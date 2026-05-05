@@ -2,10 +2,6 @@
 
 A full-stack web application designed to promote healthy lifestyles among youth through fitness tracking, wellness monitoring, gamification, and multi-role oversight.
 
-> Final Year Project — The Catholic University of Eastern Africa (CUEA)  
-> Department of Computer & Information Science | SCI 320  
-> Student: Cynthia Mueni Muli
-
 ---
 
 ## Features
@@ -141,9 +137,3 @@ All health targets in this system are based on peer-reviewed, internationally re
 - **Daily steps** — NIH / CDC Physical Activity Guidelines for Americans
 - **Calorie targets** — USDA Dietary Guidelines 2020–2025
 - **Youth age range** — African Union / Constitution of Kenya 2010 (ages 6–35)
-
----
-
-## License
-
-This project was developed as an academic final year project at The Catholic University of Eastern Africa.
