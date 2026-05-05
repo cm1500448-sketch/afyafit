@@ -41,16 +41,16 @@ A full-stack web application designed to promote healthy lifestyles among youth 
 
 ```
 afyafit/
-├── backend/                  # Node.js + Express API
-│   ├── middleware/           # Auth and role middleware
-│   ├── routes/               # All API route handlers
-│   ├── services/             # PDF generation, report data
-│   ├── utils/                # Gamification, health targets, notifications
-│   ├── scripts/              # Database seed and migration scripts
-│   └── server.js             # Entry point
-├── src/                      # React frontend
-│   ├── components/           # All UI components by feature
-│   └── utils/                # Frontend utilities
+├── backend/
+│   ├── middleware/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   ├── scripts/
+│   └── server.js
+├── src/
+│   ├── components/
+│   └── utils/
 └── README.md
 ```
 
@@ -67,7 +67,7 @@ afyafit/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/afyafit.git
+   git clone https://github.com/cm1500448-sketch/afyafit.git
    cd afyafit
    ```
 
@@ -85,12 +85,12 @@ afyafit/
 4. **Set up environment variables**
    ```bash
    cp backend/.env.example backend/.env
-   # Edit backend/.env with your database credentials
    ```
+   Edit `backend/.env` with your database credentials.
 
 5. **Set up the database**
-   - Create a MySQL database named `youth_fitness`
-   - Run the seed scripts:
+
+   Create a MySQL database named `youth_fitness`, then run:
    ```bash
    cd backend
    node scripts/seedRoles.js
