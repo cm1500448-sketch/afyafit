@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node scripts/runMigration.js",
+    "migrate:profile": "node scripts/addUserProfileColumns.js",
+    "migrate:gamification": "node scripts/runGamificationMigration.js",
+    "seed:roles": "node scripts/seedRoles.js",
+    "seed:coach-admin": "node scripts/seedCoachAdmin.js",
+    "setup": "node scripts/seedRoles.js && node scripts/addUserProfileColumns.js && node scripts/runMigration.js && node scripts/runGamificationMigration.js && node scripts/seedCoachAdmin.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.1",
+    "mysql2": "^3.16.3",
+    "pdfkit": "^0.17.2"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}

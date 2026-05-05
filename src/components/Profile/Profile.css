@@ -1,0 +1,205 @@
+/* Profile Container */
+.profile-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.highlight-text {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.profile-card {
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.profile-details-card {
+    background: #e0e7ff; /* Soft dull indigo */
+}
+
+.parent-link-card {
+    background: #dcfce7; /* Soft dull emerald */
+}
+
+.coach-request-card {
+    background: #fef3c7; /* Soft dull amber */
+}
+
+.profile-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: #ffffff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+    min-width: 140px;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+.level-tag {
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.level-tag.Beginner { 
+    background: #dcfce7; 
+    color: #166534; 
+}
+
+.level-tag.Intermediate { 
+    background: #f1f5f9; 
+    color: #475569; 
+}
+
+.level-tag.Advanced { 
+    background: #fee2e2; 
+    color: #991b1b; 
+}
+
+.level-selector {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.level-btn {
+    padding: 1rem 2rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 15px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #475569;
+}
+
+.level-btn:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.level-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.success-msg {
+    color: #10b981;
+    font-weight: 500;
+    margin-top: 1rem;
+    padding: 0.8rem;
+    background: #ecfdf5;
+    border-radius: 10px;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.profile-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.profile-details-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.profile-details-table td:first-child {
+    color: #334155;
+    width: 30%;
+    font-weight: 600;
+}
+
+.update-btn {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 1rem;
+    align-self: center;
+}
+
+.update-btn:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+}
+
+.danger-zone-card {
+    margin-top: 2rem;
+    background: #fee2e2; /* Soft dull red */
+    border: 1px solid #fca5a5;
+    text-align: left;
+}
+
+.danger-title {
+    color: #991b1b;
+    margin-bottom: 0.5rem;
+}
+
+.danger-text {
+    color: #475569;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.profile-input.disabled {
+    background-color: #f8fafc;
+    cursor: not-allowed;
+    color: #94a3b8;
+}

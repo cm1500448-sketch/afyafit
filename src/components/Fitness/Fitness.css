@@ -1,0 +1,330 @@
+/* Fitness Container */
+.fitness-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  color: #1e293b;
+}
+
+/* Header & Progress */
+.fitness-header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.highlight-text {
+  color: var(--color-primary);
+}
+
+.progress-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #e2e8f0;
+  margin: 10px 0;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.start-workout-btn {
+  padding: 15px 25px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.start-workout-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Weekly Schedule */
+.schedule-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.schedule-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 5px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.schedule-box.today {
+  border: 2px solid var(--color-primary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+.schedule-box.completed {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.day-name { 
+  font-size: 0.75rem; 
+  font-weight: bold; 
+  color: #475569; 
+}
+
+.activity-name { 
+  font-size: 0.7rem; 
+  text-align: center; 
+  margin-top: 5px; 
+  color: #64748b; 
+  font-weight: 500; 
+}
+
+/* Exercise Cards */
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.exercise-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.exercise-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.exercise-card.completed {
+  opacity: 0.7;
+  background: #f8fafc;
+}
+
+.check-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.exercise-card.completed .check-btn {
+  color: #4f46e5;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  color: #374151;
+}
+
+.focus-tag {
+  background: #f3f4f6;
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.ex-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.fav-icon, .video-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.video-btn:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* Search & Actions */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  padding: 10px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.view-all-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #334155;
+  transition: all 0.2s;
+}
+
+.view-all-btn:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+/* Rest Day */
+.rest-day-card {
+  text-align: center;
+  padding: 50px;
+  background: #f8fafc;
+  border-radius: 20px;
+  border: 2px dashed #cbd5e1;
+}
+
+.rest-icon { 
+  font-size: 3rem; 
+  margin-bottom: 10px; 
+}
+
+/* Progress Bar Animation */
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 5px rgba(79, 70, 229, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(79, 70, 229, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(79, 70, 229, 0.5); }
+}
+
+.progress-bar-fill[style*="width: 100%"] {
+  animation: pulse-glow 2s infinite;
+  filter: brightness(1.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .schedule-row { 
+    grid-template-columns: repeat(4, 1fr); 
+  }
+  
+  .exercise-card { 
+    grid-template-columns: 1fr; 
+    text-align: center; 
+  }
+  
+  .ex-actions { 
+    justify-content: center; 
+  }
+}
+
+/* Finish Workout Button */
+.finish-workout-container {
+  margin-top: 30px;
+  padding: 25px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+}
+
+.finish-workout-btn {
+  width: 100%;
+  max-width: 400px;
+  padding: 18px 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.finish-workout-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 222, 128, 0.5);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.finish-workout-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.finish-workout-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.finish-hint {
+  margin-top: 15px;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Save Status Indicators */
+.save-status {
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.save-status.saving {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.save-status.saved {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.save-status.error {
+  background: #fee2e2;
+  color: #991b1b;
+}

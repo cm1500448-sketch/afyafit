@@ -1,0 +1,183 @@
+.admin-coach-requests {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.requests-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.requests-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.requests-count {
+  background: #3b82f6;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #64748b;
+}
+
+.requests-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.requests-table thead {
+  background: #f1f5f9;
+}
+
+.requests-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.requests-table td {
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.requests-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.requests-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.requests-table tbody tr.expanded {
+  background: #f1f5f9;
+}
+
+.goals-cell {
+  max-width: 300px;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-expand,
+.btn-assign {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-expand {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.btn-expand:hover {
+  background: #cbd5e1;
+}
+
+.btn-assign {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-assign:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+.expanded-row td {
+  padding: 0;
+  background: #f8fafc;
+}
+
+.expanded-content {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.detail-section h4 {
+  color: #475569;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.5rem 0;
+}
+
+.detail-section p {
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  color: #ef4444;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .admin-coach-requests {
+    padding: 1rem;
+  }
+
+  .requests-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .requests-table-container {
+    overflow-x: auto;
+  }
+
+  .requests-table {
+    min-width: 800px;
+  }
+
+  .expanded-content {
+    grid-template-columns: 1fr;
+  }
+}

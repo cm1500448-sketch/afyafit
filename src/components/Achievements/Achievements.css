@@ -1,0 +1,283 @@
+/* Achievements Container */
+.achievements-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.achievements-loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #64748b;
+}
+
+/* Header */
+.achievements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.achievements-header h1 {
+  font-size: 2rem;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.achievements-header p {
+  color: #64748b;
+  margin: 0;
+}
+
+.total-points-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.total-points-badge svg {
+  color: #fbbf24;
+}
+
+.points-label {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.points-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+/* Sections */
+.achievements-container section {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.achievements-container section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Badges Section */
+.badges-subsection {
+  margin-bottom: 2rem;
+}
+
+.badges-subsection:last-child {
+  margin-bottom: 0;
+}
+
+.badges-subsection h3 {
+  font-size: 1.1rem;
+  color: #475569;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.badge-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.badge-card.earned {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.badge-card.earned:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(79, 70, 229, 0.2);
+}
+
+.badge-card.locked {
+  opacity: 0.6;
+  border-color: #cbd5e1;
+}
+
+.badge-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.locked-icon {
+  filter: grayscale(100%);
+}
+
+.badge-card h4 {
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.badge-card p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.badge-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.badge-date,
+.badge-points {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.badge-points {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Points History */
+.points-history {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.points-transaction {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.points-transaction:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.transaction-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.transaction-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.transaction-reason {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.transaction-date {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.transaction-points {
+  font-size: 1.25rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.transaction-points.positive {
+  color: #10b981;
+}
+
+.transaction-points.negative {
+  color: #ef4444;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+.empty-state svg {
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  margin: 0.5rem 0;
+}
+
+.empty-hint {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .achievements-container {
+    padding: 1rem;
+  }
+
+  .achievements-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .total-points-badge {
+    width: 100%;
+  }
+
+  .badges-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .points-transaction {
+    flex-wrap: wrap;
+  }
+}

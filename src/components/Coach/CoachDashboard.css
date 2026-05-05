@@ -1,0 +1,350 @@
+/* Coach Dashboard */
+.coach-dashboard {
+  padding: 1.5rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.coach-dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.coach-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.coach-dashboard-header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.coach-name-highlight {
+  color: var(--color-primary);
+}
+
+.coach-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 2px 0 0 0;
+}
+
+.coach-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.coach-nav button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.coach-nav button:hover {
+  color: #3b82f6;
+  background: #f8fafc;
+}
+
+.coach-nav button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.coach-loading,
+.coach-empty {
+  text-align: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+/* Header */
+.coach-header {
+  margin-bottom: 1.5rem;
+}
+
+.coach-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  color: #1e293b;
+}
+
+.coach-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.coach-redflag-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Roster Grid */
+.coach-roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Athlete Card */
+.coach-athlete-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 1.25rem;
+  border-left: 4px solid transparent;
+}
+
+.coach-athlete-card.has-redflags {
+  border-left-color: #ef4444;
+  background: #fffbeb;
+}
+
+.athlete-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.athlete-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.athlete-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.athlete-info h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.athlete-email {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Red Flag Badges */
+.red-flag-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.red-flag-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Progress Rings */
+.athlete-rings {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.coach-progress-ring {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coach-progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.coach-progress-ring .ring-bg {
+  fill: none;
+  stroke: #e2e8f0;
+  stroke-width: 6;
+}
+
+.coach-progress-ring .ring-fill {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.ring-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -2px;
+}
+
+.ring-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.ring-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.ring-detail {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Red Flag List */
+.red-flag-list {
+  margin: 0;
+  padding: 0.75rem 0 0 0;
+  border-top: 1px solid #fecaca;
+  list-style: none;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}
+
+.red-flag-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0;
+}
+
+/* ── Two-column layout when chat is open ── */
+.coach-dashboard-body {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.coach-users-panel {
+  flex: 1;
+  min-width: 0;
+  transition: flex 0.3s ease;
+}
+
+/* Chat panel — slides in from the right */
+.coach-chat-panel {
+  width: 380px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.15);
+  animation: slideInRight 0.25s ease;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.chat-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #1e293b;
+  color: white;
+}
+
+.chat-panel-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-panel-close {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.chat-panel-close:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+/* Responsive — stack on smaller screens */
+@media (max-width: 1100px) {
+  .coach-dashboard-body.with-chat {
+    flex-direction: column;
+  }
+  .coach-chat-panel {
+    width: 100%;
+    position: static;
+  }
+}

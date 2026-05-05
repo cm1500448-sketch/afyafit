@@ -1,0 +1,488 @@
+/* Wellness Container */
+.wellness-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  color: #2d3436;
+}
+
+.wellness-header { 
+  margin-bottom: 2rem; 
+}
+
+.header-main { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.highlight-text { 
+  color: var(--color-primary); 
+  font-weight: 700; 
+}
+
+.grade-badge { 
+  padding: 10px 20px; 
+  border-radius: 30px; 
+  color: #fff; 
+  font-weight: bold; 
+}
+
+.subtitle { 
+  color: #475569; 
+  margin-top: 5px; 
+  font-weight: 500; 
+}
+
+/* Insight Cards */
+.insight-card { 
+  border-left: 6px solid #dfe6e9; 
+  margin-bottom: 2rem; 
+  transition: all 0.3s; 
+}
+
+.insight-card.warning { 
+  border-left-color: #ff7675; 
+  background: #fff5f5; 
+}
+
+.insight-card.priority { 
+  border-left-color: var(--color-primary); 
+  background: #f3f0ff; 
+}
+
+.insight-card.good { 
+  border-left-color: #55efc4; 
+  background: #ebfaf0; 
+}
+
+.insight-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 8px; 
+}
+
+.insight-text { 
+  font-size: 0.95rem; 
+  line-height: 1.5; 
+}
+
+.action-link { 
+  background: none; 
+  border: none; 
+  color: var(--color-primary); 
+  text-decoration: underline; 
+  cursor: pointer; 
+  font-weight: bold; 
+  padding: 0; 
+  margin-top: 10px; 
+}
+
+/* Grid Layout */
+.wellness-grid { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 1.5rem; 
+  margin-bottom: 2rem; 
+}
+
+.wellness-card {
+  background: white; 
+  padding: 1.5rem; 
+  border-radius: 20px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+  position: relative;
+  width: 100%;
+}
+
+/* Hydration */
+.water-card { 
+  min-height: 180px; 
+  overflow: hidden; 
+}
+
+.water-wave-bg {
+  position: absolute; 
+  bottom: 0; 
+  left: 0; 
+  width: 100%;
+  background: linear-gradient(180deg, rgba(79, 70, 229, 0.2), rgba(79, 70, 229, 0.4));
+  transition: height 1s ease-in-out; 
+  z-index: 1;
+}
+
+.card-content { 
+  position: relative; 
+  z-index: 2; 
+}
+
+.big-number { 
+  font-size: 3.5rem; 
+  font-weight: 800; 
+  color: var(--color-primary); 
+}
+
+.goal-label { 
+  color: #475569; 
+  font-size: 1.2rem; 
+  font-weight: 600; 
+}
+
+.add-water-btn { 
+  background: var(--color-primary); 
+  color: white; 
+  border: none; 
+  padding: 12px 24px; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  margin-top: 10px; 
+  font-weight: bold; 
+}
+
+/* Sleep Quality */
+.sleep-input-container { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  margin-top: 15px; 
+}
+
+.sleep-icon { 
+  font-size: 2rem; 
+}
+
+.sleep-input { 
+  width: 80px; 
+  padding: 10px; 
+  border: 2px solid #f1f2f6; 
+  border-radius: 10px; 
+  font-size: 1.2rem; 
+  font-weight: bold; 
+  text-align: center; 
+}
+
+.sleep-status-bar { 
+  height: 8px; 
+  background: #f1f2f6; 
+  border-radius: 4px; 
+  margin-top: 20px; 
+  overflow: hidden; 
+}
+
+.status-fill { 
+  height: 100%; 
+  background: var(--color-primary); 
+  transition: width 0.5s ease; 
+}
+
+/* Mental Mood */
+.mood-card .mood-subtitle {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.mood-tag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mood-tag:hover {
+  border-color: var(--color-primary);
+  background: #f3f0ff;
+}
+
+.mood-tag.selected {
+  border-color: var(--color-primary);
+  background: #ede9fe;
+}
+
+.mood-tag-emoji { font-size: 1.6rem; }
+.mood-tag-label { font-size: 0.75rem; font-weight: 600; color: #374151; }
+
+.mood-feedback-preview {
+  background: #f0fdf4;
+  border-left: 4px solid #4ade80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.confirm-mood-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.confirm-mood-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.confirmed-mood-view {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.confirmed-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confirmed-tag {
+  background: #ede9fe;
+  border: 1px solid var(--color-primary);
+  color: #4f46e5;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.mood-display-container { 
+  display: flex; 
+  justify-content: center; 
+  padding: 1rem 0; 
+  min-height: 100px; 
+}
+
+.mood-icons { 
+  display: flex; 
+  gap: 15px; 
+}
+
+.mood-btn { 
+  font-size: 2rem; 
+  background: #f1f2f6; 
+  border: none; 
+  border-radius: 12px; 
+  padding: 12px; 
+  cursor: pointer; 
+  transition: 0.2s; 
+}
+
+.mood-btn:hover { 
+  transform: scale(1.1); 
+  background: #ffeaa7; 
+}
+
+.selected-mood-view { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.confirmed-emoji { 
+  font-size: 4rem; 
+}
+
+.change-link { 
+  background: none; 
+  border: none; 
+  color: var(--color-primary); 
+  text-decoration: underline; 
+  cursor: pointer; 
+  font-size: 0.9rem; 
+}
+
+.mood-tip { 
+  text-align: left; 
+  font-size: 0.88rem; 
+  color: #374151; 
+  line-height: 1.5;
+  background: #f0fdf4;
+  border-left: 4px solid #4ade80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+/* Habits */
+.habit-section-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 1.5rem; 
+  margin-bottom: 2rem; 
+}
+
+.habit-item { 
+  display: flex; 
+  align-items: center; 
+  gap: 15px; 
+  margin-top: 15px; 
+  cursor: pointer; 
+}
+
+.checkbox { 
+  width: 22px; 
+  height: 22px; 
+  border: 2px solid var(--color-primary); 
+  border-radius: 6px; 
+  transition: 0.2s; 
+}
+
+.checkbox.checked { 
+  background: var(--color-primary); 
+  box-shadow: inset 0 0 0 4px white; 
+}
+
+/* Breathing Animation */
+.meditation-card { 
+  text-align: center; 
+}
+
+.breathing-circle {
+  width: 120px; 
+  height: 120px; 
+  border: 4px solid var(--color-primary); 
+  border-radius: 50%;
+  margin: 20px auto; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.breathe-text { 
+  font-weight: 600; 
+  color: var(--color-primary); 
+}
+
+.breathing-circle.active { 
+  animation: breatheScale 8s infinite ease-in-out; 
+  background: rgba(79, 70, 229, 0.1); 
+}
+
+@keyframes breatheScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+}
+
+.play-btn { 
+  background: var(--color-primary); 
+  color: white; 
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 25px; 
+  cursor: pointer; 
+  font-weight: 600; 
+}
+
+/* Nutrition Hub */
+.nutrition-hub { 
+  margin-top: 3rem; 
+}
+
+.section-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 1rem; 
+}
+
+.calorie-badge { 
+  padding: 6px 15px; 
+  background: #dfe6e9; 
+  border-radius: 20px; 
+  font-weight: bold; 
+  font-size: 0.9rem; 
+}
+
+.meal-form { 
+  display: grid; 
+  grid-template-columns: 1.2fr 2fr 1fr auto; 
+  gap: 10px; 
+  margin-bottom: 20px; 
+}
+
+.meal-form input { 
+  padding: 12px; 
+  border: 1px solid #dfe6e9; 
+  border-radius: 10px; 
+  font-size: 0.9rem; 
+}
+
+.add-btn { 
+  background: var(--color-primary); 
+  color: white; 
+  border: none; 
+  border-radius: 10px; 
+  padding: 0 20px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: 0.2s; 
+}
+
+.add-btn:hover { 
+  background: var(--color-primary-hover); 
+}
+
+.nutrition-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  margin-top: 10px; 
+}
+
+.nutrition-table th { 
+  text-align: left; 
+  padding: 12px; 
+  border-bottom: 2px solid #e2e8f0; 
+  color: #334155; 
+  font-size: 0.9rem; 
+  font-weight: 700; 
+}
+
+.nutrition-table td { 
+  padding: 12px; 
+  border-bottom: 1px solid #f1f2f6; 
+  font-size: 0.95rem; 
+}
+
+.date-cell { 
+  color: #64748b; 
+  font-size: 0.8rem; 
+  font-weight: 500; 
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .meal-form { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .header-main { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 10px; 
+  }
+}
