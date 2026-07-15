@@ -1,22 +1,15 @@
-/**
- * LOGIN FORM COMPONENT
- * 
- * Displays login form with email and password
- * Includes password visibility toggle and forgot password link
- */
-
 import { Eye, EyeOff } from "lucide-react";
 
-const LoginForm = ({ 
-  form, 
-  showPassword, 
-  error, 
+const LoginForm = ({
+  form,
+  showPassword,
+  error,
   successMessage,
-  onFormChange, 
-  onSubmit, 
+  onFormChange,
+  onSubmit,
   onTogglePassword,
   onForgotPassword,
-  onSwitchToRegister 
+  onSwitchToRegister
 }) => {
   return (
     <div className="auth-container">
@@ -36,7 +29,7 @@ const LoginForm = ({
             onChange={onFormChange}
             required
           />
-          
+
           <div className="password-input-wrapper">
             <input
               name="password"
@@ -68,7 +61,6 @@ const LoginForm = ({
         <button className="switch-btn" onClick={onSwitchToRegister}>
           Don't have an account? Register
         </button>
-
 
       </div>
     </div>

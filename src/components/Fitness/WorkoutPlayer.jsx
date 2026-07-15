@@ -4,8 +4,7 @@ import './WorkoutPlayer.css';
 
 const WorkoutPlayer = ({ workout, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  
-  // Guard clause: If for some reason the database returns an empty exercise list
+
   if (!workout || !workout.exercises || workout.exercises.length === 0) {
     return (
       <div className="workout-player-overlay">
@@ -31,8 +30,7 @@ const WorkoutPlayer = ({ workout, onClose }) => {
   return (
     <div className="workout-player-overlay">
       <div className="player-card immersive">
-        
-        {/* Header & Progress */}
+
         <div className="player-header">
           <button className="close-btn" onClick={onClose}>
             <X size={28} color="white" />
@@ -45,7 +43,6 @@ const WorkoutPlayer = ({ workout, onClose }) => {
           </div>
         </div>
 
-        {/* Video Focus Area */}
         <div className="exercise-display">
           <div className="exercise-video-container">
             {currentExercise.youtubeId ? (
@@ -59,12 +56,11 @@ const WorkoutPlayer = ({ workout, onClose }) => {
               ></iframe>
             ) : (
               <div className="video-placeholder">
-                <span className="text-4xl">{currentExercise.icon || '🏋️'}</span>
+                <span className="text-4xl">{currentExercise.icon || '💪'}</span>
                 <p>Tutorial coming soon...</p>
               </div>
             )}
 
-            {/* Floating Info Overlay */}
             <div className="exercise-info-overlay">
               <h1 className="exercise-name">{currentExercise.name}</h1>
               <div className="exercise-stats-row">
@@ -72,7 +68,7 @@ const WorkoutPlayer = ({ workout, onClose }) => {
                   <span className="stat-label">Sets</span>
                   <span className="stat-value">{currentExercise.sets || '1'}</span>
                 </div>
-                
+
                 <div className="stat-pill glass">
                   <span className="stat-label">Reps/Time</span>
                   <span className="stat-value">{currentExercise.reps || currentExercise.target || 'To Failure'}</span>
@@ -82,10 +78,9 @@ const WorkoutPlayer = ({ workout, onClose }) => {
           </div>
         </div>
 
-        {/* Navigation Footer */}
         <div className="player-footer">
-          <button 
-            onClick={handlePrev} 
+          <button
+            onClick={handlePrev}
             className="nav-btn-secondary"
             style={{ opacity: currentIndex === 0 ? 0 : 1, pointerEvents: currentIndex === 0 ? 'none' : 'auto' }}
           >

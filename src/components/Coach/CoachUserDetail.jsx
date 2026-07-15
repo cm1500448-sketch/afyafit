@@ -130,9 +130,8 @@ const CoachUserDetail = () => {
         </div>
       </div>
 
-      {/* Messaging Panel */}
       <div className="data-section">
-        <h2>💬 Message {user.name}</h2>
+        <h2>Message {user.name}</h2>
         <CoachChat
           otherUserId={parseInt(userId)}
           otherName={user.name}

@@ -1,20 +1,18 @@
 import { useState } from 'react';
 
-// All available moods the user can pick from
 const MOODS = [
-  { id: 0, emoji: '😴', label: 'Tired',      score: 0 },
-  { id: 1, emoji: '😰', label: 'Anxious',    score: 0 },
-  { id: 2, emoji: '😔', label: 'Sad',        score: 0 },
-  { id: 3, emoji: '😤', label: 'Frustrated', score: 1 },
-  { id: 4, emoji: '😐', label: 'Neutral',    score: 1 },
-  { id: 5, emoji: '😌', label: 'Calm',       score: 2 },
-  { id: 6, emoji: '😊', label: 'Happy',      score: 2 },
-  { id: 7, emoji: '💪', label: 'Motivated',  score: 3 },
-  { id: 8, emoji: '🤩', label: 'Energized',  score: 3 },
-  { id: 9, emoji: '🥰', label: 'Grateful',   score: 3 },
+  { id: 0, label: 'Tired',      score: 0 },
+  { id: 1, label: 'Anxious',    score: 0 },
+  { id: 2, label: 'Sad',        score: 0 },
+  { id: 3, label: 'Frustrated', score: 1 },
+  { id: 4, label: 'Neutral',    score: 1 },
+  { id: 5, label: 'Calm',       score: 2 },
+  { id: 6, label: 'Happy',      score: 2 },
+  { id: 7, label: 'Motivated',  score: 3 },
+  { id: 8, label: 'Energized',  score: 3 },
+  { id: 9, label: 'Grateful',   score: 3 },
 ];
 
-// Generate feedback based on the selected mood labels
 const getFeedback = (selected) => {
   if (selected.length === 0) return null;
 
@@ -56,7 +54,7 @@ const MoodCard = ({ selectedMood, isMoodConfirmed, onMoodSelect, onChangeMood })
   const handleConfirm = () => {
     if (selectedIds.length === 0) return;
     const selected = MOODS.filter(m => selectedIds.includes(m.id));
-    // Average score rounded, clamped to 0–3 for backend compatibility
+
     const avg = Math.round(selected.reduce((s, m) => s + m.score, 0) / selected.length);
     onMoodSelect(avg);
   };
@@ -83,13 +81,11 @@ const MoodCard = ({ selectedMood, isMoodConfirmed, onMoodSelect, onChangeMood })
                 className={`mood-tag ${selectedIds.includes(mood.id) ? 'selected' : ''}`}
                 onClick={() => toggleMood(mood)}
               >
-                <span className="mood-tag-emoji">{mood.emoji}</span>
                 <span className="mood-tag-label">{mood.label}</span>
               </button>
             ))}
           </div>
 
-          {/* Live feedback while selecting */}
           {feedback && (
             <div className="mood-feedback-preview">
               <p>{feedback}</p>
@@ -106,15 +102,14 @@ const MoodCard = ({ selectedMood, isMoodConfirmed, onMoodSelect, onChangeMood })
         </>
       ) : (
         <div className="confirmed-mood-view">
-          {/* Show confirmed mood tags */}
           <div className="confirmed-tags">
             {selectedMoods.length > 0
               ? selectedMoods.map(m => (
                   <span key={m.id} className="confirmed-tag">
-                    {m.emoji} {m.label}
+                    {m.label}
                   </span>
                 ))
-              : <span className="confirmed-tag">{MOODS[selectedMood]?.emoji} {MOODS[selectedMood]?.label}</span>
+              : <span className="confirmed-tag">{MOODS[selectedMood]?.label}</span>
             }
           </div>
 

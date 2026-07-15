@@ -5,7 +5,7 @@ import './CoachDashboard.css';
 
 const CoachDashboard = () => {
   const [coachName, setCoachName] = useState('');
-  // selectedUser holds { user_id, user_name } when coach clicks a user to chat
+
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ const CoachDashboard = () => {
         </div>
       </div>
 
-      {/* Two-column layout when a user is selected for chat */}
       <div className={`coach-dashboard-body ${selectedUser ? 'with-chat' : ''}`}>
         <div className="coach-users-panel">
           <CoachAssignedUsers
@@ -45,12 +44,11 @@ const CoachDashboard = () => {
           />
         </div>
 
-        {/* Chat panel slides in on the right when a user is selected */}
         {selectedUser && (
           <div className="coach-chat-panel">
             <div className="chat-panel-header">
               <span className="chat-panel-title">
-                💬 Chat with {selectedUser.user_name}
+                Chat with {selectedUser.user_name}
               </span>
               <button
                 className="chat-panel-close"

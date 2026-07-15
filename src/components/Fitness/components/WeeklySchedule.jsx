@@ -1,10 +1,3 @@
-/**
- * WEEKLY SCHEDULE COMPONENT
- * 
- * Displays 7-day workout schedule
- * Highlights current day and shows plan names
- */
-
 const WeeklySchedule = ({ days, todayIndex, todaysPlan }) => {
   return (
     <div className="schedule-row">

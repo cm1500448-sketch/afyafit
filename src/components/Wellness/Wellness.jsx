@@ -1,10 +1,3 @@
-/**
- * WELLNESS - MAIN COMPONENT
- * 
- * Displays wellness tracking dashboard
- * Tracks hydration, sleep, mood, meals, and habits
- */
-
 import BreathingExercise from './components/BreathingExercise';
 import HydrationCard from './components/HydrationCard';
 import MealLogger from './components/MealLogger';
@@ -16,26 +9,10 @@ import './Wellness.css';
 
 const Wellness = () => {
   const {
-    water,
-    sleep,
-    selectedMood,
-    isMoodConfirmed,
-    error,
-    isBreathing,
-    habits,
-    meals,
-    newMeal,
-    totalCalories,
-    insight,
-    grade,
-    setIsMoodConfirmed,
-    setIsBreathing,
-    setNewMeal,
-    handleAddWater,
-    handleUpdateSleep,
-    handleMoodSelect,
-    addMeal,
-    toggleHabit
+    water, sleep, selectedMood, isMoodConfirmed, error, isBreathing,
+    habits, meals, newMeal, totalCalories, insight, grade,
+    setIsMoodConfirmed, setIsBreathing, setNewMeal,
+    handleAddWater, handleUpdateSleep, handleMoodSelect, addMeal, toggleHabit
   } = useWellnessData();
 
   const waterGoal = 8;
@@ -52,21 +29,12 @@ const Wellness = () => {
         <p>Syncing your hydration, sleep, and nutrition logs.</p>
       </header>
 
-      {/* Error Message Display */}
       {error && (
-        <div className="wellness-card" style={{ 
-          backgroundColor: '#fee', 
-          border: '1px solid #fcc', 
-          color: '#c33',
-          padding: '12px',
-          marginBottom: '20px',
-          borderRadius: '8px'
-        }}>
-          <strong>⚠️ Validation Error:</strong> {error}
+        <div className="wellness-card" style={{ backgroundColor: '#fee', border: '1px solid #fcc', color: '#c33', padding: '12px', marginBottom: '20px', borderRadius: '8px' }}>
+          <strong>⚠ Validation Error:</strong> {error}
         </div>
       )}
 
-      {/* Smart Insight Card */}
       <div className={`wellness-card insight-card ${insight.type}`}>
         <div className="insight-header">
           <span className="insight-icon">{insight.icon}</span>
@@ -76,46 +44,17 @@ const Wellness = () => {
       </div>
 
       <div className="wellness-grid">
-        <HydrationCard 
-          water={water} 
-          waterGoal={waterGoal} 
-          onAddWater={handleAddWater} 
-        />
-        
-        <SleepCard 
-          sleep={sleep} 
-          onUpdateSleep={handleUpdateSleep} 
-        />
-        
-        <MoodCard 
-          selectedMood={selectedMood}
-          isMoodConfirmed={isMoodConfirmed}
-          onMoodSelect={handleMoodSelect}
-          onChangeMood={() => setIsMoodConfirmed(false)}
-        />
+        <HydrationCard water={water} waterGoal={waterGoal} onAddWater={handleAddWater} />
+        <SleepCard sleep={sleep} onUpdateSleep={handleUpdateSleep} />
+        <MoodCard selectedMood={selectedMood} isMoodConfirmed={isMoodConfirmed} onMoodSelect={handleMoodSelect} onChangeMood={() => setIsMoodConfirmed(false)} />
       </div>
 
-      {/* Habits & Breathing Grid */}
       <div className="habit-section-grid">
-        <SleepHygiene 
-          habits={habits} 
-          onToggleHabit={toggleHabit} 
-        />
-        
-        <BreathingExercise 
-          isBreathing={isBreathing} 
-          onToggle={() => setIsBreathing(!isBreathing)} 
-        />
+        <SleepHygiene habits={habits} onToggleHabit={toggleHabit} />
+        <BreathingExercise isBreathing={isBreathing} onToggle={() => setIsBreathing(!isBreathing)} />
       </div>
 
-      {/* Nutrition Hub */}
-      <MealLogger 
-        meals={meals}
-        newMeal={newMeal}
-        totalCalories={totalCalories}
-        onMealChange={setNewMeal}
-        onAddMeal={addMeal}
-      />
+      <MealLogger meals={meals} newMeal={newMeal} totalCalories={totalCalories} onMealChange={setNewMeal} onAddMeal={addMeal} />
     </div>
   );
 };

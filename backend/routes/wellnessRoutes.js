@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const wellnessController = require('./wellnessController');
@@ -9,4 +8,5 @@ router.put('/update-daily-stats', authMiddleware, wellnessController.updateDaily
 router.post('/add-meal', authMiddleware, wellnessController.addMeal);
 router.get('/get-meals', authMiddleware, wellnessController.getMeals);
 router.get('/weekly-report', authMiddleware, wellnessController.getWeeklyReport);
+
 module.exports = router;

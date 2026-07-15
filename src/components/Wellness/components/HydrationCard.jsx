@@ -1,10 +1,3 @@
-/**
- * HYDRATION CARD COMPONENT
- * 
- * Displays water intake with visual wave effect
- * Allows adding water cups
- */
-
 const HydrationCard = ({ water, waterGoal, onAddWater }) => {
   const progressPercent = Math.min((water / waterGoal) * 100, 100);
 

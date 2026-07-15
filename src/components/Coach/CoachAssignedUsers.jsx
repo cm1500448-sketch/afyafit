@@ -44,7 +44,9 @@ const CoachAssignedUsers = ({ onChatUser, selectedUserId }) => {
 
       {users.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">👥</div>
+          <div className="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
           <h3>No Assigned Users Yet</h3>
           <p>You don't have any users assigned to you at this time.</p>
           <p>Check back later or contact your administrator.</p>
@@ -109,7 +111,7 @@ const CoachAssignedUsers = ({ onChatUser, selectedUserId }) => {
                     user_name: user.user_name
                   })}
                 >
-                  {selectedUserId === user.user_id ? '💬 Chatting' : '💬 Chat'}
+                  {selectedUserId === user.user_id ? 'Chatting' : 'Chat'}
                 </button>
               </div>
             </div>

@@ -8,7 +8,6 @@ const MetricCard = ({ label, value, unit, progress, onClick, showSync, onSync, s
   const lastAccelRef = useRef(null);
   const listenerRef = useRef(null);
 
-  // Keep liveSteps in sync with incoming value when not tracking
   useEffect(() => {
     if (!tracking) {
       setLiveSteps(value || 0);
@@ -25,7 +24,7 @@ const MetricCard = ({ label, value, unit, progress, onClick, showSync, onSync, s
 
     if (last !== null) {
       const delta = Math.abs(magnitude - last);
-      // Step threshold — tuned for walking motion
+
       if (delta > 3.5) {
         stepCountRef.current += 1;
         setLiveSteps(stepCountRef.current);
@@ -35,7 +34,6 @@ const MetricCard = ({ label, value, unit, progress, onClick, showSync, onSync, s
   };
 
   const startTracking = async () => {
-    // iOS 13+ requires permission
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
       try {
         const permission = await DeviceMotionEvent.requestPermission();
@@ -67,7 +65,7 @@ const MetricCard = ({ label, value, unit, progress, onClick, showSync, onSync, s
       listenerRef.current = null;
     }
     setTracking(false);
-    // Save to backend
+
     if (onStepsUpdate) onStepsUpdate(stepCountRef.current);
   };
 
@@ -117,7 +115,7 @@ const MetricCard = ({ label, value, unit, progress, onClick, showSync, onSync, s
           </button>
           {tracking && (
             <p style={{ fontSize: '0.75rem', color: '#10b981', margin: '6px 0 0', fontWeight: 600 }}>
-              📡 Counting steps...
+              Counting steps...
             </p>
           )}
         </div>

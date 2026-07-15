@@ -1,12 +1,5 @@
-/**
- * EXERCISE LIBRARY COMPONENT
- * 
- * Displays full exercise library with search
- * Shows all available exercises from database
- */
-
 const ExerciseLibrary = ({ exercises, searchTerm, favorites, onToggleFavorite, onWatchTutorial }) => {
-  const filteredExercises = exercises.filter(ex => 
+  const filteredExercises = exercises.filter(ex =>
     ex.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -24,7 +17,7 @@ const ExerciseLibrary = ({ exercises, searchTerm, favorites, onToggleFavorite, o
           </div>
           <div className="ex-actions">
             <button onClick={() => onToggleFavorite(ex.name)} className="fav-icon">
-              {favorites.includes(ex.name) ? '❤️' : '🤍'}
+              {favorites.includes(ex.name) ? '♥' : '♡'}
             </button>
             <button className="video-btn" onClick={() => onWatchTutorial(ex.youtubeId)}>
               Tutorial

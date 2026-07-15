@@ -1,29 +1,18 @@
-/**
- * CoachChat — WhatsApp/Instagram style messaging between coach and user.
- * Supports: text, images, videos, files (PDF, Word, Excel, etc.)
- *
- * Props:
- *   otherUserId  — ID of the person to chat with
- *   otherName    — display name of the other person
- *   myRole       — 'coach' | 'youth' | 'user'
- */
-
 import { useEffect, useRef, useState } from 'react';
 import './CoachChat.css';
 
 const API = 'http://localhost:5000';
 
-// File type helpers
 const isImage = (mime) => mime?.startsWith('image/');
 const isVideo = (mime) => mime?.startsWith('video/');
 const isPDF   = (mime) => mime === 'application/pdf';
 
 function FileIcon({ mime }) {
-  if (isPDF(mime))  return <span className="file-icon pdf">PDF</span>;
-  if (mime?.includes('word'))  return <span className="file-icon doc">DOC</span>;
-  if (mime?.includes('excel') || mime?.includes('spreadsheet')) return <span className="file-icon xls">XLS</span>;
-  if (mime?.includes('powerpoint') || mime?.includes('presentation')) return <span className="file-icon ppt">PPT</span>;
-  if (mime?.includes('zip'))  return <span className="file-icon zip">ZIP</span>;
+  if (isPDF(mime))                                                          return <span className="file-icon pdf">PDF</span>;
+  if (mime?.includes('word'))                                               return <span className="file-icon doc">DOC</span>;
+  if (mime?.includes('excel') || mime?.includes('spreadsheet'))            return <span className="file-icon xls">XLS</span>;
+  if (mime?.includes('powerpoint') || mime?.includes('presentation'))      return <span className="file-icon ppt">PPT</span>;
+  if (mime?.includes('zip'))                                                return <span className="file-icon zip">ZIP</span>;
   return <span className="file-icon generic">FILE</span>;
 }
 
@@ -35,19 +24,18 @@ function formatBytes(bytes) {
 }
 
 const CoachChat = ({ otherUserId, otherName, myRole }) => {
-  const [messages, setMessages]     = useState([]);
-  const [input, setInput]           = useState('');
-  const [loading, setLoading]       = useState(true);
-  const [sending, setSending]       = useState(false);
-  const [error, setError]           = useState('');
-  const [preview, setPreview]       = useState(null); // { file, url, type }
-  const [lightbox, setLightbox]     = useState(null); // full-screen image/video
-  const bottomRef  = useRef(null);
-  const pollRef    = useRef(null);
-  const fileRef    = useRef(null);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput]       = useState('');
+  const [loading, setLoading]   = useState(true);
+  const [sending, setSending]   = useState(false);
+  const [error, setError]       = useState('');
+  const [preview, setPreview]   = useState(null);
+  const [lightbox, setLightbox] = useState(null);
+  const bottomRef = useRef(null);
+  const pollRef   = useRef(null);
+  const fileRef   = useRef(null);
   const token = localStorage.getItem('token');
 
-  // ── Fetch messages ──────────────────────────────────────────────────────────
   const fetchMessages = async (silent = false) => {
     try {
       if (!silent) setLoading(true);
@@ -75,7 +63,6 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // ── Send text ───────────────────────────────────────────────────────────────
   const sendText = async (e) => {
     e.preventDefault();
     if (!input.trim() || sending) return;
@@ -96,14 +83,11 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     }
   };
 
-  // ── File picker ─────────────────────────────────────────────────────────────
   const onFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
-    const type = file.type.startsWith('image/') ? 'image'
-               : file.type.startsWith('video/') ? 'video'
-               : 'file';
+    const type = file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : 'file';
     setPreview({ file, url, type });
     e.target.value = '';
   };
@@ -113,7 +97,6 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     setPreview(null);
   };
 
-  // ── Send file ───────────────────────────────────────────────────────────────
   const sendFile = async () => {
     if (!preview || sending) return;
     setSending(true);
@@ -121,7 +104,6 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
       const form = new FormData();
       form.append('file', preview.file);
       if (input.trim()) form.append('caption', input.trim());
-
       const res = await fetch(`${API}/api/messages/${otherUserId}/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
@@ -141,14 +123,8 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     }
   };
 
-  // ── Date helpers ────────────────────────────────────────────────────────────
   const safeDate = (ts) => new Date(ts?.toString().replace(' ', 'T'));
-
-  const formatTime = (ts) => {
-    const d = safeDate(ts);
-    return isNaN(d) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
+  const formatTime = (ts) => { const d = safeDate(ts); return isNaN(d) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); };
   const formatDate = (ts) => {
     const d = safeDate(ts);
     if (isNaN(d)) return '';
@@ -159,10 +135,8 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     return d.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
   };
 
-  const isMyMessage = (msg) =>
-    myRole === 'coach' ? msg.sender_role === 'coach' : msg.sender_role === 'user';
+  const isMyMessage = (msg) => myRole === 'coach' ? msg.sender_role === 'coach' : msg.sender_role === 'user';
 
-  // ── Group by date ───────────────────────────────────────────────────────────
   const grouped = messages.reduce((acc, msg) => {
     const d = safeDate(msg.created_at);
     const key = isNaN(d) ? 'Unknown' : d.toDateString();
@@ -171,10 +145,8 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
     return acc;
   }, {});
 
-  // ── Render message content ──────────────────────────────────────────────────
   const renderContent = (msg) => {
     const fileUrl = msg.file_url ? `${API}${msg.file_url}` : null;
-
     if (isImage(msg.mime_type) && fileUrl) {
       return (
         <div className="msg-media" onClick={() => setLightbox({ type: 'image', url: fileUrl })}>
@@ -183,7 +155,6 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
         </div>
       );
     }
-
     if (isVideo(msg.mime_type) && fileUrl) {
       return (
         <div className="msg-media" onClick={() => setLightbox({ type: 'video', url: fileUrl })}>
@@ -193,7 +164,6 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
         </div>
       );
     }
-
     if (fileUrl) {
       return (
         <a className="msg-file" href={fileUrl} target="_blank" rel="noreferrer" download={msg.file_name}>
@@ -206,14 +176,12 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
         </a>
       );
     }
-
     return <p className="bubble-text">{msg.content}</p>;
   };
 
   return (
     <>
       <div className="coach-chat">
-        {/* Header */}
         <div className="chat-header">
           <div className="chat-avatar">{otherName?.charAt(0)?.toUpperCase() || '?'}</div>
           <div className="chat-header-info">
@@ -222,25 +190,19 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
           </div>
         </div>
 
-        {/* Messages */}
         <div className="chat-messages">
           {loading && <div className="chat-loading">Loading messages...</div>}
           {!loading && messages.length === 0 && (
             <div className="chat-empty">
               <p>No messages yet.</p>
               <p className="chat-empty-hint">
-                {myRole === 'coach'
-                  ? `Send ${otherName} a message, workout plan, or video to get started.`
-                  : 'Your coach will message you here.'}
+                {myRole === 'coach' ? `Send ${otherName} a message to get started.` : 'Your coach will message you here.'}
               </p>
             </div>
           )}
-
           {Object.entries(grouped).map(([dateKey, dayMsgs]) => (
             <div key={dateKey}>
-              <div className="chat-date-divider">
-                <span>{formatDate(dayMsgs[0].created_at)}</span>
-              </div>
+              <div className="chat-date-divider"><span>{formatDate(dayMsgs[0].created_at)}</span></div>
               {dayMsgs.map((msg) => {
                 const isMe = isMyMessage(msg);
                 return (
@@ -262,75 +224,30 @@ const CoachChat = ({ otherUserId, otherName, myRole }) => {
 
         {error && <div className="chat-error">{error}</div>}
 
-        {/* File preview bar */}
         {preview && (
           <div className="preview-bar">
-            {preview.type === 'image' && (
-              <img src={preview.url} alt="preview" className="preview-thumb" />
-            )}
-            {preview.type === 'video' && (
-              <video src={preview.url} className="preview-thumb" />
-            )}
-            {preview.type === 'file' && (
-              <div className="preview-file-name">📎 {preview.file.name}</div>
-            )}
+            {preview.type === 'image' && <img src={preview.url} alt="preview" className="preview-thumb" />}
+            {preview.type === 'video' && <video src={preview.url} className="preview-thumb" />}
+            {preview.type === 'file' && <div className="preview-file-name">⊕ {preview.file.name}</div>}
             <button className="preview-cancel" onClick={cancelPreview}>✕</button>
           </div>
         )}
 
-        {/* Input row */}
-        <form
-          className="chat-input-row"
-          onSubmit={preview ? (e) => { e.preventDefault(); sendFile(); } : sendText}
-        >
-          {/* Attach button */}
-          <button
-            type="button"
-            className="chat-attach-btn"
-            onClick={() => fileRef.current?.click()}
-            title="Attach image, video or file"
-            disabled={sending}
-          >
-            📎
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
-            style={{ display: 'none' }}
-            onChange={onFileChange}
-          />
-
-          <input
-            className="chat-input"
-            type="text"
-            placeholder={preview ? 'Add a caption (optional)...' : `Message ${otherName}...`}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            maxLength={2000}
-            disabled={sending}
-          />
-
-          <button
-            className="chat-send-btn"
-            type="submit"
-            disabled={(!input.trim() && !preview) || sending}
-          >
+        <form className="chat-input-row" onSubmit={preview ? (e) => { e.preventDefault(); sendFile(); } : sendText}>
+          <button type="button" className="chat-attach-btn" onClick={() => fileRef.current?.click()} title="Attach file" disabled={sending}>⊕</button>
+          <input ref={fileRef} type="file" accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" style={{ display: 'none' }} onChange={onFileChange} />
+          <input className="chat-input" type="text" placeholder={preview ? 'Add a caption (optional)...' : `Message ${otherName}...`} value={input} onChange={(e) => setInput(e.target.value)} maxLength={2000} disabled={sending} />
+          <button className="chat-send-btn" type="submit" disabled={(!input.trim() && !preview) || sending}>
             {sending ? '...' : '➤'}
           </button>
         </form>
       </div>
 
-      {/* Lightbox for full-screen image/video */}
       {lightbox && (
         <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
           <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
-          {lightbox.type === 'image' && (
-            <img src={lightbox.url} alt="full" className="lightbox-media" onClick={(e) => e.stopPropagation()} />
-          )}
-          {lightbox.type === 'video' && (
-            <video src={lightbox.url} controls autoPlay className="lightbox-media" onClick={(e) => e.stopPropagation()} />
-          )}
+          {lightbox.type === 'image' && <img src={lightbox.url} alt="full" className="lightbox-media" onClick={(e) => e.stopPropagation()} />}
+          {lightbox.type === 'video' && <video src={lightbox.url} controls autoPlay className="lightbox-media" onClick={(e) => e.stopPropagation()} />}
         </div>
       )}
     </>

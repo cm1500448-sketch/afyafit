@@ -1,27 +1,21 @@
-/**
- * NotificationBell — shows unread count badge and a dropdown of notifications.
- * Placed in the Sidebar so every role sees it.
- * Polls every 30 seconds for new notifications.
- */
-
 import { Bell, Check, Trash2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import authFetch from '../../utils/authFetch';
 import './NotificationBell.css';
 
 const API = 'http://localhost:5000';
 
-// Icon per notification type
 const typeIcon = {
-  coach_request:     '🏋️',
-  coach_application: '📋',
-  coach_approved:    '✅',
-  coach_rejected:    '❌',
-  coach_assigned:    '🎉',
-  new_message:       '💬',
-  red_flag:          '🚨',
-  wellness_streak:   '🔥',
-  badge_earned:      '🏆',
+  coach_request:     '[Workout]',
+  coach_application: '[Apply]',
+  coach_approved:    '[OK]',
+  coach_rejected:    '[X]',
+  coach_assigned:    '[Assigned]',
+  new_message:       '[Msg]',
+  red_flag:          '[Alert]',
+  wellness_streak:   '[Streak]',
+  badge_earned:      '[Badge]',
 };
 
 const safeDate = (ts) => new Date(ts?.toString().replace(' ', 'T'));
@@ -42,22 +36,17 @@ const NotificationBell = () => {
   const [open, setOpen]                   = useState(false);
   const dropdownRef = useRef(null);
   const navigate    = useNavigate();
-  const token       = localStorage.getItem('token');
 
   const fetchCount = async () => {
     try {
-      const res = await fetch(`${API}/api/notifications/unread-count`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await authFetch(`${API}/api/notifications/unread-count`);
       if (res.ok) setUnread((await res.json()).count || 0);
     } catch {}
   };
 
   const fetchAll = async () => {
     try {
-      const res = await fetch(`${API}/api/notifications`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await authFetch(`${API}/api/notifications`);
       if (res.ok) {
         const data = await res.json();
         setNotifications(data.notifications || []);
@@ -66,14 +55,12 @@ const NotificationBell = () => {
     } catch {}
   };
 
-  // Poll unread count every 30 seconds
   useEffect(() => {
     fetchCount();
     const t = setInterval(fetchCount, 30000);
     return () => clearInterval(t);
   }, []);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -91,45 +78,30 @@ const NotificationBell = () => {
 
   const markRead = async (id, e) => {
     e.stopPropagation();
-    await fetch(`${API}/api/notifications/${id}/read`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await authFetch(`${API}/api/notifications/${id}/read`, { method: 'PUT' });
     setNotifications(ns => ns.map(n => n.id === id ? { ...n, is_read: 1 } : n));
     setUnread(u => Math.max(0, u - 1));
   };
 
   const deleteOne = async (id, e) => {
     e.stopPropagation();
-    await fetch(`${API}/api/notifications/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await authFetch(`${API}/api/notifications/${id}`, { method: 'DELETE' });
     setNotifications(ns => ns.filter(n => n.id !== id));
   };
 
   const markAllRead = async () => {
-    await fetch(`${API}/api/notifications/read-all`, {
-      method: 'PUT',
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await authFetch(`${API}/api/notifications/read-all`, { method: 'PUT' });
     setNotifications(ns => ns.map(n => ({ ...n, is_read: 1 })));
     setUnread(0);
   };
 
   const handleClick = async (n) => {
     if (!n.is_read) {
-      await fetch(`${API}/api/notifications/${n.id}/read`, {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await authFetch(`${API}/api/notifications/${n.id}/read`, { method: 'PUT' });
       setNotifications(ns => ns.map(x => x.id === n.id ? { ...x, is_read: 1 } : x));
       setUnread(u => Math.max(0, u - 1));
     }
-    if (n.action_url) {
-      navigate(n.action_url);
-      setOpen(false);
-    }
+    if (n.action_url) { navigate(n.action_url); setOpen(false); }
   };
 
   return (
@@ -170,7 +142,7 @@ const NotificationBell = () => {
                   className={`notif-item ${!n.is_read ? 'unread' : ''}`}
                   onClick={() => handleClick(n)}
                 >
-                  <span className="notif-type-icon">{typeIcon[n.type] || '🔔'}</span>
+                  <span className="notif-type-icon">{typeIcon[n.type] || '[•]'}</span>
                   <div className="notif-body">
                     <p className="notif-item-title">{n.title}</p>
                     <p className="notif-item-msg">{n.message}</p>

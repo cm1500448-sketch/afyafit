@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
@@ -16,41 +15,32 @@ router.get('/badges', authMiddleware, async (req, res) => {
     );
     res.json(rows);
   } catch (err) {
-    console.error('Error fetching badges:', err);
     res.status(500).json({ error: 'Failed to fetch badges' });
   }
 });
 
-
 router.get('/points', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.execute(
-      `SELECT COALESCE(SUM(points_delta), 0) as total
-       FROM point_transactions
-       WHERE user_id = ?`,
+      'SELECT COALESCE(SUM(points_delta), 0) as total FROM point_transactions WHERE user_id = ?',
       [req.user.id]
     );
     res.json({ total: rows[0]?.total || 0 });
   } catch (err) {
-    console.error('Error fetching points:', err);
     res.status(500).json({ error: 'Failed to fetch points' });
   }
 });
-
 
 router.get('/points-history', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT points_delta, reason, reference_type, reference_id, created_at
-       FROM point_transactions
-       WHERE user_id = ?
-       ORDER BY created_at DESC
-       LIMIT 50`,
+       FROM point_transactions WHERE user_id = ?
+       ORDER BY created_at DESC LIMIT 50`,
       [req.user.id]
     );
     res.json(rows);
   } catch (err) {
-    console.error('Error fetching points history:', err);
     res.status(500).json({ error: 'Failed to fetch points history' });
   }
 });
@@ -59,13 +49,10 @@ router.get('/all-badges', authMiddleware, async (req, res) => {
   try {
     const [rows] = await db.execute(
       `SELECT id, code, name, description, icon_url, points_reward
-       FROM badge_definitions
-       WHERE is_active = 1
-       ORDER BY points_reward ASC`
+       FROM badge_definitions WHERE is_active = 1 ORDER BY points_reward ASC`
     );
     res.json(rows);
   } catch (err) {
-    console.error('Error fetching all badges:', err);
     res.status(500).json({ error: 'Failed to fetch badges' });
   }
 });

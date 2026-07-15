@@ -1,10 +1,3 @@
-/**
- * BREATHING EXERCISE COMPONENT
- * 
- * Displays mindful breathing exercise
- * Animated circle for breathing guidance
- */
-
 const BreathingExercise = ({ isBreathing, onToggle }) => {
   return (
     <div className="wellness-card meditation-card">

@@ -1,4 +1,3 @@
-
 import { Award, Calendar, TrendingUp, Trophy, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import './Achievements.css';
@@ -19,7 +18,7 @@ const Achievements = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      
+
       const [badgesRes, pointsRes, historyRes, allBadgesRes] = await Promise.all([
         fetch('http://localhost:5000/api/gamification/badges', {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -61,7 +60,6 @@ const Achievements = () => {
 
   return (
     <div className="achievements-container">
-      {/* Header */}
       <header className="achievements-header">
         <div>
           <h1>Your Achievements</h1>
@@ -76,11 +74,9 @@ const Achievements = () => {
         </div>
       </header>
 
-      {/* Badges Section */}
       <section className="badges-section">
         <h2><Trophy size={20} /> Badges ({data.badges.length}/{data.availableBadges.length})</h2>
-        
-        {/* Earned Badges */}
+
         {data.badges.length > 0 && (
           <div className="badges-subsection">
             <h3>Earned Badges</h3>
@@ -102,14 +98,15 @@ const Achievements = () => {
           </div>
         )}
 
-        {/* Locked Badges */}
         {lockedBadges.length > 0 && (
           <div className="badges-subsection">
             <h3>Available Badges</h3>
             <div className="badges-grid">
               {lockedBadges.map((badge) => (
                 <div key={badge.id} className="badge-card locked">
-                  <div className="badge-icon locked-icon">🔒</div>
+                  <div className="badge-icon locked-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </div>
                   <h4>{badge.name}</h4>
                   <p>{badge.description}</p>
                   <div className="badge-footer">
@@ -125,10 +122,9 @@ const Achievements = () => {
         )}
       </section>
 
-      {/* Points History Section */}
       <section className="points-section">
         <h2><TrendingUp size={20} /> Points History</h2>
-        
+
         {data.points.history.length === 0 ? (
           <div className="empty-state">
             <Award size={48} />

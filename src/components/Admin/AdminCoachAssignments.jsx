@@ -113,13 +113,13 @@ const AdminCoachAssignments = () => {
                   <td>{new Date(assignment.assigned_at).toLocaleDateString()}</td>
                   <td>{assignment.admin_name}</td>
                   <td className="actions-cell">
-                    <button 
+                    <button
                       className="btn-reassign"
                       onClick={() => handleReassign(assignment)}
                     >
                       Reassign
                     </button>
-                    <button 
+                    <button
                       className="btn-remove"
                       onClick={() => handleRemove(assignment)}
                     >

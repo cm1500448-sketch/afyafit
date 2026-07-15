@@ -1,19 +1,15 @@
-
 const db = require('../db');
 
 async function authorizeReportAccess(requestingUserId, requestingUserRole, targetUserId) {
   try {
-    // Admin can access any report
     if (requestingUserRole === 'admin') {
       return { authorized: true, reason: 'Admin access' };
     }
 
-    // User accessing their own report
     if (requestingUserId === targetUserId) {
       return { authorized: true, reason: 'Own report' };
     }
 
-    // Parent accessing child's report
     if (requestingUserRole === 'parent') {
       const [relationship] = await db.execute(
         `SELECT id FROM parent_youth_relationships
@@ -26,7 +22,6 @@ async function authorizeReportAccess(requestingUserId, requestingUserRole, targe
       }
     }
 
-    // Coach accessing assigned user's report
     if (requestingUserRole === 'coach') {
       const [assignment] = await db.execute(
         `SELECT id FROM coach_assignments
@@ -39,16 +34,15 @@ async function authorizeReportAccess(requestingUserId, requestingUserRole, targe
       }
     }
 
-    // No authorization found
-    return { 
-      authorized: false, 
-      reason: 'No permission to access this report' 
+    return {
+      authorized: false,
+      reason: 'No permission to access this report'
     };
   } catch (error) {
     console.error('Error in authorizeReportAccess:', error);
-    return { 
-      authorized: false, 
-      reason: 'Authorization check failed' 
+    return {
+      authorized: false,
+      reason: 'Authorization check failed'
     };
   }
 }
@@ -75,7 +69,7 @@ async function getUserRole(userId) {
 async function getUserInfo(userId) {
   try {
     const [rows] = await db.execute(
-      `SELECT 
+      `SELECT
         COALESCE(CONCAT(up.first_name, ' ', up.last_name), u.email) as name,
         u.email
        FROM users u

@@ -1,147 +1,112 @@
-
 const express = require('express');
-const router = express.Router(); // This line creates a router object
-const db = require('../db'); // This line imports database connection
+const router = express.Router();
+const db = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 const { getHealthTargets } = require('../utils/healthTargets');
 
 router.get('/stats', authMiddleware, async (req, res) => {
-    const userId = req.user.id; // This line gets the user ID from the JWT token
-    const now = new Date(); // This line gets current date and time
-    
-    // This line calculates timezone offset in milliseconds
-    // (converts minutes to milliseconds by multiplying by 60000)
-    const offset = now.getTimezoneOffset() * 60000; 
-    
-    // This line gets today's date in YYYY-MM-DD format (e.g., "2024-03-15")
-    // Adjusts for timezone, converts to ISO string, then takes only the date part
-    const today = new Date(now - offset).toISOString().split('T')[0];
+  const userId = req.user.id;
+  const now = new Date();
 
+  const offset = now.getTimezoneOffset() * 60000;
+  const today = new Date(now - offset).toISOString().split('T')[0];
+
+  try {
+    const [userRows] = await db.execute(
+      `SELECT up.first_name, up.last_name, up.height_cm, up.weight_kg, up.goal_weight_kg, up.date_of_birth
+       FROM user_profiles up WHERE up.user_id = ?`,
+      [userId]
+    );
+
+    const user = userRows[0];
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const currentWeight = user.weight_kg || 0;
+
+    const [wellnessRows] = await db.execute(
+      `SELECT water_ml, sleep_hours, mood_score, steps
+       FROM daily_wellness_logs WHERE user_id = ? AND log_date = ?`,
+      [userId, today]
+    );
+    const wellness = wellnessRows[0] || { water_ml: 0, sleep_hours: 0, mood_score: 0, steps: 0 };
+    const waterCups = Math.floor((wellness.water_ml || 0) / 250);
+
+    let consumed = 0;
     try {
-        const [userRows] = await db.execute(
-            `SELECT up.first_name, up.last_name, up.height_cm, up.weight_kg, up.goal_weight_kg,
-                    up.date_of_birth
-             FROM user_profiles up
-             WHERE up.user_id = ?`, 
-            [userId]
-        );
-        
-        // This line gets the first result from the query
-        const user = userRows[0];
-        
-        // This line checks if user was found, if not, send 404 error
-        if (!user) return res.status(404).json({ error: "User not found" });
+      const [mealRows] = await db.execute(
+        `SELECT SUM(calories_kcal) as total_cals FROM user_meals WHERE user_id = ? AND meal_date = ?`,
+        [userId, today]
+      );
+      consumed = mealRows[0]?.total_cals || 0;
+    } catch (e) {}
 
-        // 2. Get current weight from user_profiles
-        const currentWeight = user.weight_kg || 0;
+    const [weeklyLogs] = await db.execute(
+      `SELECT DISTINCT DATE_FORMAT(log_date, '%Y-%m-%d') as log_date
+       FROM daily_wellness_logs WHERE user_id = ? AND log_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)`,
+      [userId]
+    );
 
-        const [wellnessRows] = await db.execute(
-            `SELECT water_ml, sleep_hours, mood_score, steps 
-             FROM daily_wellness_logs 
-             WHERE user_id = ? AND log_date = ?`, 
-            [userId, today]
-        );
-        const wellness = wellnessRows[0] || { water_ml: 0, sleep_hours: 0, mood_score: 2, steps: 0 };
-        
-        // 1 cup = 250ml. Daily target for youth: 8 cups (2000ml) per National Academies / AAP guidelines
-        const waterCups = Math.floor((wellness.water_ml || 0) / 250);
+    const goalWeight = user.goal_weight_kg || currentWeight;
+    const targets = getHealthTargets(user.date_of_birth, currentWeight, goalWeight);
 
-        // 4. Fetch Today's Total Calories
-        let consumed = 0;
-        try {
-            const [mealRows] = await db.execute(
-                `SELECT SUM(calories_kcal) as total_cals 
-                 FROM user_meals 
-                 WHERE user_id = ? AND meal_date = ?`, 
-                [userId, today]
-            );
-            consumed = mealRows[0]?.total_cals || 0;
-        } catch (e) {
-            console.log("Note: user_meals table query failed. Defaulting to 0.");
-        }
-
-        // 5. Fetch Consistency - from daily_wellness_logs table
-        const [weeklyLogs] = await db.execute(
-            `SELECT DISTINCT DATE_FORMAT(log_date, '%Y-%m-%d') as log_date 
-             FROM daily_wellness_logs 
-             WHERE user_id = ? AND log_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)`,
-            [userId]
-        );
-
-        const goalWeight = user.goal_weight_kg || currentWeight;
-
-        // Calculate age-aware health targets using evidence-based guidelines
-        const targets = getHealthTargets(user.date_of_birth, currentWeight, goalWeight);
-
-        // BMI calculation — WHO formula: weight(kg) / height(m)²
-        // BMI-for-age interpretation for youth (CDC/WHO):
-        //   < 18.5  = Underweight
-        //   18.5–24.9 = Normal weight
-        //   25–29.9 = Overweight
-        //   ≥ 30    = Obese
-        // Note: For users under 18, BMI percentile (not raw BMI) is the clinical standard.
-        // Raw BMI is shown here as a general indicator only.
-        let bmi = null;
-        let bmiCategory = null;
-        if (currentWeight > 0 && user.height_cm > 0) {
-            const heightM = user.height_cm / 100;
-            bmi = parseFloat((currentWeight / (heightM * heightM)).toFixed(1));
-            if (bmi < 18.5)       bmiCategory = 'Underweight';
-            else if (bmi < 25)    bmiCategory = 'Normal weight';
-            else if (bmi < 30)    bmiCategory = 'Overweight';
-            else                  bmiCategory = 'Obese';
-        }
-
-        res.json({
-            fullName: `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'User',
-            weight: currentWeight,
-            height: user.height_cm,
-            goalWeight: goalWeight,
-            steps: wellness.steps || 0,
-            waterIntake: waterCups,
-            sleep: wellness.sleep_hours || 0,
-            mood_score: wellness.mood_score || 2,
-            caloriesConsumed: consumed,
-            consistency: weeklyLogs.map(log => log.log_date),
-            // Age-aware targets — adjust automatically based on user's date of birth
-            sleepGoal: targets.sleepGoal,
-            sleepMin: targets.sleepMin,
-            sleepMax: targets.sleepMax,
-            waterGoal: targets.waterGoal,
-            stepsGoal: targets.stepsGoal,
-            calorieTarget: targets.calorieTarget,
-            ageGroup: targets.ageGroup,
-            age: targets.age,
-            // BMI — WHO formula, shown as general indicator
-            bmi,
-            bmiCategory
-        });
-
-    } catch (err) {
-        console.error("CRITICAL SQL ERROR:", err.message);
-        res.status(500).json({ error: "Database query failed", message: err.message });
+    let bmi = null;
+    let bmiCategory = null;
+    if (currentWeight > 0 && user.height_cm > 0) {
+      const heightM = user.height_cm / 100;
+      bmi = parseFloat((currentWeight / (heightM * heightM)).toFixed(1));
+      if (bmi < 18.5)    bmiCategory = 'Underweight';
+      else if (bmi < 25) bmiCategory = 'Normal weight';
+      else if (bmi < 30) bmiCategory = 'Overweight';
+      else               bmiCategory = 'Obese';
     }
+
+    res.json({
+      fullName: `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'User',
+      weight: currentWeight,
+      height: user.height_cm,
+      goalWeight,
+      steps: wellness.steps || 0,
+      waterIntake: waterCups,
+      sleep: wellness.sleep_hours || 0,
+      mood_score: wellness.mood_score || 2,
+      caloriesConsumed: consumed,
+      consistency: weeklyLogs.map(log => log.log_date),
+      sleepGoal: targets.sleepGoal,
+      sleepMin: targets.sleepMin,
+      sleepMax: targets.sleepMax,
+      waterGoal: targets.waterGoal,
+      stepsGoal: targets.stepsGoal,
+      calorieTarget: targets.calorieTarget,
+      ageGroup: targets.ageGroup,
+      age: targets.age,
+      bmi,
+      bmiCategory
+    });
+  } catch (err) {
+    console.error('Dashboard stats error:', err.message);
+    res.status(500).json({ error: 'Database query failed', message: err.message });
+  }
 });
 
 router.post('/update-steps', authMiddleware, async (req, res) => {
-    const { steps } = req.body;
-    const userId = req.user.id;
-    const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const today = new Date(now - offset).toISOString().split('T')[0];
+  const { steps } = req.body;
+  const userId = req.user.id;
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60000;
+  const today = new Date(now - offset).toISOString().split('T')[0];
 
-    try {
-        await db.execute(
-            `INSERT INTO daily_wellness_logs (user_id, log_date, steps)
-             VALUES (?, ?, ?)
-             ON DUPLICATE KEY UPDATE steps = ?`,
-            [userId, today, steps, steps]
-        );
-        res.json({ message: "Steps updated", steps });
-    } catch (err) {
-        console.error("Update steps error:", err.message);
-        res.status(500).json({ error: "Failed to update steps" });
-    }
+  try {
+    await db.execute(
+      `INSERT INTO daily_wellness_logs (user_id, log_date, steps)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE steps = ?`,
+      [userId, today, steps, steps]
+    );
+    res.json({ message: 'Steps updated', steps });
+  } catch (err) {
+    console.error('Update steps error:', err.message);
+    res.status(500).json({ error: 'Failed to update steps' });
+  }
 });
 
 module.exports = router;

@@ -1,20 +1,12 @@
-/**
- * TODAY'S PLAN COMPONENT
- * 
- * Displays today's workout exercises
- * Allows marking exercises as complete
- * Shows finish workout button when exercises are completed
- */
-
-const TodaysPlan = ({ 
-  plan, 
-  completedExercises, 
-  favorites, 
+const TodaysPlan = ({
+  plan,
+  completedExercises,
+  favorites,
   saveStatus,
-  onToggleExercise, 
-  onToggleFavorite, 
+  onToggleExercise,
+  onToggleFavorite,
   onWatchTutorial,
-  onFinishWorkout 
+  onFinishWorkout
 }) => {
   if (plan.exercises.length === 0) {
     return (
@@ -40,7 +32,7 @@ const TodaysPlan = ({
           </div>
           <div className="ex-actions">
             <button onClick={() => onToggleFavorite(ex.name)} className="fav-icon">
-              {favorites.includes(ex.name) ? '❤️' : '🤍'}
+              {favorites.includes(ex.name) ? '♥' : '♡'}
             </button>
             <button className="video-btn" onClick={() => onWatchTutorial(ex.youtubeId)}>
               Tutorial
@@ -48,21 +40,21 @@ const TodaysPlan = ({
           </div>
         </div>
       ))}
-      
+
       {completedExercises.length > 0 && (
         <div className="finish-workout-container">
-          <button 
-            className="finish-workout-btn" 
+          <button
+            className="finish-workout-btn"
             onClick={onFinishWorkout}
             disabled={saveStatus === 'saving'}
           >
-            {saveStatus === 'saving' ? 'Saving...' : 
-             saveStatus === 'saved' ? 'Saved!' : 
+            {saveStatus === 'saving' ? 'Saving...' :
+             saveStatus === 'saved' ? 'Saved!' :
              `Finish Workout (${completedExercises.length}/${plan.exercises.length})`}
           </button>
           <p className="finish-hint">
-            {completedExercises.length === plan.exercises.length 
-              ? 'All exercises completed! Click to save your progress.' 
+            {completedExercises.length === plan.exercises.length
+              ? 'All exercises completed! Click to save your progress.'
               : `You've completed ${completedExercises.length} exercise${completedExercises.length > 1 ? 's' : ''}. Click to save your progress.`}
           </p>
         </div>

@@ -25,7 +25,6 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
         throw new Error(data.error || 'Failed to cancel request');
       }
 
-      // Success - call parent callback
       if (onCancel) {
         onCancel();
       }
@@ -48,8 +47,6 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
 
   const statusBadge = getStatusBadge(request.status);
 
-  // Safely parse the date — MySQL returns "YYYY-MM-DD HH:MM:SS" which Safari
-  // cannot parse directly. Replace the space with "T" to make it ISO 8601.
   const safeDate = request.created_at
     ? new Date(request.created_at.toString().replace(' ', 'T'))
     : null;
@@ -62,8 +59,8 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
     <div className="coach-request-status-container">
       <div className="status-header">
         <h2>Your Coach Request</h2>
-        <div 
-          className="status-badge" 
+        <div
+          className="status-badge"
           style={{ backgroundColor: statusBadge.color }}
         >
           <span className="badge-icon">{statusBadge.icon}</span>
@@ -72,10 +69,9 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
       </div>
 
       <div className="status-card">
-        {/* Request Details */}
         <div className="detail-section">
           <h3>Request Details</h3>
-          
+
           <div className="detail-item">
             <label>Submitted On:</label>
             <p>{formattedDate}</p>
@@ -106,7 +102,6 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
           )}
         </div>
 
-        {/* Coach Info (if assigned) */}
         {request.status === 'assigned' && request.coach_name && (
           <div className="coach-info-section">
             <h3>Your Assigned Coach</h3>
@@ -123,10 +118,9 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
               Your coach will reach out to you soon to start your fitness journey!
             </p>
 
-            {/* Messaging — only available when coach_id is known */}
             {request.coach_id && (
               <div className="coach-chat-section">
-                <h4>💬 Message Your Coach</h4>
+                <h4>Message Your Coach</h4>
                 <CoachChat
                   otherUserId={request.coach_id}
                   otherName={request.coach_name}
@@ -137,7 +131,6 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
           </div>
         )}
 
-        {/* Actions */}
         {request.status === 'pending' && (
           <div className="actions-section">
             {!showCancelConfirm ? (
@@ -172,21 +165,19 @@ const CoachRequestStatus = ({ request, onCancel, onUpdate }) => {
           </div>
         )}
 
-        {/* Error Message */}
         {error && (
           <div className="error-message">
-            <span className="error-icon">⚠️</span>
+            <span className="error-icon">⚠ </span>
             {error}
           </div>
         )}
       </div>
 
-      {/* Status Info */}
       {request.status === 'pending' && (
         <div className="info-box">
           <h3>What's happening now?</h3>
           <p>
-            Your request is being reviewed by our admin team. We're working to match you 
+            Your request is being reviewed by our admin team. We're working to match you
             with the best coach for your goals. You'll be notified once a coach is assigned.
           </p>
         </div>

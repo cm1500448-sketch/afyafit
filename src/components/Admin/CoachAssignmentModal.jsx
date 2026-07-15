@@ -39,10 +39,9 @@ const CoachAssignmentModal = ({ request, onClose, onSuccess, isReassignment = fa
     setAssigning(true);
     try {
       const token = localStorage.getItem('token');
-      
+
       let res;
       if (isReassignment) {
-        // Update existing assignment
         res = await fetch(`http://localhost:5000/api/admin/coach-assignments/${request.id}`, {
           method: 'PUT',
           headers: {
@@ -54,7 +53,6 @@ const CoachAssignmentModal = ({ request, onClose, onSuccess, isReassignment = fa
           })
         });
       } else {
-        // Create new assignment
         res = await fetch('http://localhost:5000/api/admin/coach-assignments', {
           method: 'POST',
           headers: {
@@ -154,8 +152,8 @@ const CoachAssignmentModal = ({ request, onClose, onSuccess, isReassignment = fa
           <button className="btn-cancel" onClick={onClose} disabled={assigning}>
             Cancel
           </button>
-          <button 
-            className="btn-confirm" 
+          <button
+            className="btn-confirm"
             onClick={handleAssign}
             disabled={!selectedCoach || assigning}
           >

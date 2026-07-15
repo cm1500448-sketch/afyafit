@@ -79,18 +79,18 @@ const AdminCoachRequests = () => {
                     <td>{request.user_email}</td>
                     <td>{new Date(request.created_at).toLocaleDateString()}</td>
                     <td className="goals-cell">
-                      {request.goals.length > 50 
-                        ? `${request.goals.substring(0, 50)}...` 
+                      {request.goals.length > 50
+                        ? `${request.goals.substring(0, 50)}...`
                         : request.goals}
                     </td>
                     <td className="actions-cell">
-                      <button 
+                      <button
                         className="btn-expand"
                         onClick={() => toggleRow(request.id)}
                       >
                         {expandedRow === request.id ? 'Hide' : 'Details'}
                       </button>
-                      <button 
+                      <button
                         className="btn-assign"
                         onClick={() => handleAssignClick(request)}
                       >

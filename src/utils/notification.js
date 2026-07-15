@@ -1,14 +1,6 @@
-/**
- * NOTIFICATION UTILITY
- * 
- * Helper function to show notifications
- * Replaces alert() calls throughout the app
- */
-
 let notificationContainer = null;
 let notificationId = 0;
 
-// Initialize notification container
 const getContainer = () => {
   if (!notificationContainer) {
     notificationContainer = document.createElement('div');
@@ -19,108 +11,49 @@ const getContainer = () => {
   return notificationContainer;
 };
 
-// Show notification
+const removeNotification = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.style.animation = 'slideOut 0.3s ease-out';
+    setTimeout(() => el.remove(), 300);
+  }
+};
+
 export const showNotification = (message, type = 'info', duration = 3000) => {
   const container = getContainer();
   const id = `notification-${notificationId++}`;
-  
-  // Create notification element
+
+  const colors = { info: '#3b82f6', success: '#22c55e', error: '#ef4444', warning: '#f59e0b' };
+
   const notification = document.createElement('div');
   notification.id = id;
-  notification.className = `notification notification-${type}`;
   notification.style.cssText = `
-    position: relative;
-    margin: 20px 20px 0 0;
-    min-width: 300px;
-    max-width: 500px;
-    padding: 16px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    pointer-events: auto;
-    animation: slideIn 0.3s ease-out;
+    position: relative; margin: 20px 20px 0 0; min-width: 300px; max-width: 500px;
+    padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    pointer-events: auto; animation: slideIn 0.3s ease-out;
+    background: ${colors[type] || colors.info}; color: white;
   `;
-  
-  // Set background color based on type
-  const colors = {
-    info: '#3b82f6',
-    success: '#22c55e',
-    error: '#ef4444',
-    warning: '#f59e0b'
-  };
-  notification.style.background = colors[type] || colors.info;
-  notification.style.color = 'white';
-  
-  // Add message
-  const messageSpan = document.createElement('span');
-  messageSpan.textContent = message;
-  messageSpan.style.cssText = 'flex: 1; font-size: 14px; line-height: 1.4;';
-  notification.appendChild(messageSpan);
-  
-  // Add close button
+
+  const text = document.createElement('span');
+  text.textContent = message;
+  text.style.cssText = 'flex: 1; font-size: 14px; line-height: 1.4;';
+  notification.appendChild(text);
+
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '×';
-  closeBtn.style.cssText = `
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    opacity: 0.8;
-  `;
-  closeBtn.onmouseover = () => closeBtn.style.opacity = '1';
-  closeBtn.onmouseout = () => closeBtn.style.opacity = '0.8';
+  closeBtn.style.cssText = 'background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; opacity: 0.8;';
   closeBtn.onclick = () => removeNotification(id);
   notification.appendChild(closeBtn);
-  
-  // Add to container
+
   container.appendChild(notification);
-  
-  // Auto remove after duration
-  if (duration > 0) {
-    setTimeout(() => removeNotification(id), duration);
-  }
+
+  if (duration > 0) setTimeout(() => removeNotification(id), duration);
 };
 
-// Remove notification
-const removeNotification = (id) => {
-  const notification = document.getElementById(id);
-  if (notification) {
-    notification.style.animation = 'slideOut 0.3s ease-out';
-    setTimeout(() => {
-      notification.remove();
-    }, 300);
-  }
-};
-
-// Add slideIn and slideOut animations
 const style = document.createElement('style');
 style.textContent = `
-  @keyframes slideIn {
-    from {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  @keyframes slideOut {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-  }
+  @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
 `;
 document.head.appendChild(style);

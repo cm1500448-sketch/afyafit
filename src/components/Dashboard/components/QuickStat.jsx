@@ -1,4 +1,3 @@
-
 const QuickStat = ({ label, value }) => {
   return (
     <div className="quick-stat">

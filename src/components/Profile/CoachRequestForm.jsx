@@ -23,7 +23,6 @@ const CoachRequestForm = ({ onSuccess }) => {
     e.preventDefault();
     setError('');
 
-    // Validate required fields
     if (formData.reason.trim().length < 10) {
       setError('Reason must be at least 10 characters');
       return;
@@ -53,7 +52,6 @@ const CoachRequestForm = ({ onSuccess }) => {
         throw new Error(data.error || 'Failed to submit request');
       }
 
-      // Success - call parent callback
       if (onSuccess) {
         onSuccess(data.request);
       }
@@ -72,7 +70,6 @@ const CoachRequestForm = ({ onSuccess }) => {
       </div>
 
       <form onSubmit={handleSubmit} className="coach-request-form">
-        {/* Reason */}
         <div className="form-group">
           <label htmlFor="reason">
             Why do you want a coach? <span className="required">*</span>
@@ -92,7 +89,6 @@ const CoachRequestForm = ({ onSuccess }) => {
           </small>
         </div>
 
-        {/* Goals */}
         <div className="form-group">
           <label htmlFor="goals">
             What are your fitness goals? <span className="required">*</span>
@@ -112,7 +108,6 @@ const CoachRequestForm = ({ onSuccess }) => {
           </small>
         </div>
 
-        {/* Preferred Style (Optional) */}
         <div className="form-group">
           <label htmlFor="preferred_style">
             Preferred Coaching Style <span className="optional">(optional)</span>
@@ -128,7 +123,6 @@ const CoachRequestForm = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Special Requirements (Optional) */}
         <div className="form-group">
           <label htmlFor="special_requirements">
             Special Requirements <span className="optional">(optional)</span>
@@ -144,15 +138,13 @@ const CoachRequestForm = ({ onSuccess }) => {
           />
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="error-message">
-            <span className="error-icon">⚠️</span>
+            <span className="error-icon">⚠ </span>
             {error}
           </div>
         )}
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
@@ -171,7 +163,6 @@ const CoachRequestForm = ({ onSuccess }) => {
         </button>
       </form>
 
-      {/* Info Box */}
       <div className="info-box">
         <h3>What happens next?</h3>
         <ol>

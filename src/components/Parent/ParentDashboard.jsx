@@ -1,42 +1,15 @@
-
-// Import icons for UI elements
 import { Download, FileText, Users } from 'lucide-react';
-
-// Import React hooks for state and lifecycle management
 import { useEffect, useState } from 'react';
-
-// Import parent dashboard-specific styles
+import ReportButton from '../Reports/ReportButton';
 import './ParentDashboard.css';
 
-// Import ReportButton component
-import ReportButton from '../Reports/ReportButton';
-
-/**
- * ParentDashboard Component
- * Main dashboard for parents to monitor their children
- */
 const ParentDashboard = () => {
-  // ========== STATE MANAGEMENT ==========
-  
-  // List of linked youth/children
   const [youthList, setYouthList] = useState([]);
-  
-  // Currently selected youth for detailed view
   const [selectedYouth, setSelectedYouth] = useState(null);
-  
-  // Report data for selected youth
   const [reportData, setReportData] = useState(null);
-  
-  // Loading state for data fetching
   const [loading, setLoading] = useState(true);
-  
-  // Verification code for linking youth account
+  const [reportLoading, setReportLoading] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
-  
-  // Parent's email (for notifications)
-  const [parentEmail, setParentEmail] = useState('');
-  
-  // Toggle for showing link form
   const [showLinkForm, setShowLinkForm] = useState(false);
 
   useEffect(() => {
@@ -47,13 +20,9 @@ const ParentDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('http://localhost:5000/api/parent/youth-list', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
-
-      if (res.ok) {
-        const data = await res.json();
-        setYouthList(data);
-      }
+      if (res.ok) setYouthList(await res.json());
     } catch (error) {
       console.error('Error fetching youth list:', error);
     } finally {
@@ -61,38 +30,40 @@ const ParentDashboard = () => {
     }
   };
 
+  const [linkError, setLinkError] = useState('');
+  const [linkSuccess, setLinkSuccess] = useState('');
+
   const handleLinkYouth = async (e) => {
     e.preventDefault();
+    setLinkError('');
+    setLinkSuccess('');
+
+    if (!verificationCode.trim()) {
+      setLinkError('Please enter a verification code.');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('http://localhost:5000/api/parent/link-youth', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ verification_code: verificationCode })
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ verification_code: verificationCode.trim() })
       });
-
+      const data = await res.json();
       if (res.ok) {
-        const { showNotification } = await import('../../utils/notification');
-        showNotification('Youth account linked successfully!', 'success');
+        setLinkSuccess('Youth account linked successfully!');
         setVerificationCode('');
-        setShowLinkForm(false);
+        setTimeout(() => { setShowLinkForm(false); setLinkSuccess(''); }, 2000);
         fetchYouthList();
       } else {
-        const error = await res.json();
-        const { showNotification } = await import('../../utils/notification');
-        showNotification(error.error || 'Failed to link youth account', 'error');
+        setLinkError(data.error || 'Failed to link youth account. Check the code and try again.');
       }
     } catch (error) {
+      setLinkError('Network error. Make sure the server is running.');
       console.error('Error linking youth:', error);
-      const { showNotification } = await import('../../utils/notification');
-      showNotification('Failed to link youth account', 'error');
     }
   };
-
-  const [reportLoading, setReportLoading] = useState(false);
 
   const fetchReport = async (youthId, days = 30) => {
     setReportLoading(true);
@@ -100,21 +71,12 @@ const ParentDashboard = () => {
       const token = localStorage.getItem('token');
       const endDate = new Date().toISOString().split('T')[0];
       const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-      const res = await fetch(
-        `http://localhost:5000/api/parent/youth-report/${youthId}?startDate=${startDate}&endDate=${endDate}`,
-        {
-          headers: { 'Authorization': `Bearer ${token}` }
-        }
-      );
-
+      const res = await fetch(`http://localhost:5000/api/parent/youth-report/${youthId}?startDate=${startDate}&endDate=${endDate}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (res.ok) {
-        const data = await res.json();
-        setReportData(data);
+        setReportData(await res.json());
         setSelectedYouth(youthId);
-      } else {
-        const err = await res.json().catch(() => ({}));
-        console.error('Report fetch failed:', err.error || res.statusText);
       }
     } catch (error) {
       console.error('Error fetching report:', error);
@@ -125,46 +87,21 @@ const ParentDashboard = () => {
 
   const downloadReport = () => {
     if (!reportData) return;
-    const wellness = reportData.wellness || [];
-    const workouts = reportData.workouts || [];
-    const meals = reportData.meals || [];
-    const badges = reportData.badges || [];
-
     const youth = youthList.find(y => y.id === selectedYouth);
     const youthName = youth ? `${youth.first_name} ${youth.last_name}` : 'Youth';
 
-    // Create CSV content
-    let csvContent = `Youth Activity Report: ${youthName}\n`;
-    csvContent += `Period: ${reportData.period.start} to ${reportData.period.end}\n\n`;
+    let csv = `Youth Activity Report: ${youthName}\n`;
+    csv += `Period: ${reportData.period.start} to ${reportData.period.end}\n\n`;
+    csv += `Wellness Data\nDate,Water (cups),Sleep (hours),Mood Score\n`;
+    (reportData.wellness || []).forEach(d => { csv += `${d.log_date},${Math.floor((d.water_ml || 0) / 250)},${d.sleep_hours || 0},${d.mood_score || 0}\n`; });
+    csv += `\nWorkout Data\nDate,Workout Count,Total Minutes\n`;
+    (reportData.workouts || []).forEach(d => { csv += `${d.workout_date},${d.workout_count || 0},${d.total_minutes || 0}\n`; });
+    csv += `\nMeal Data\nDate,Total Calories,Meal Count\n`;
+    (reportData.meals || []).forEach(d => { csv += `${d.meal_date},${d.total_calories || 0},${d.meal_count || 0}\n`; });
+    csv += `\nBadges Earned\nName,Description,Earned Date\n`;
+    (reportData.badges || []).forEach(b => { csv += `${b.name},${b.description || ''},${b.earned_at}\n`; });
 
-    // Wellness Data
-    csvContent += `Wellness Data\n`;
-    csvContent += `Date,Water (cups),Sleep (hours),Mood Score\n`;
-    wellness.forEach(day => {
-      const waterCups = Math.floor((day.water_ml || 0) / 250);
-      csvContent += `${day.log_date},${waterCups},${day.sleep_hours || 0},${day.mood_score || 0}\n`;
-    });
-
-    csvContent += `\nWorkout Data\n`;
-    csvContent += `Date,Workout Count,Total Minutes\n`;
-    workouts.forEach(day => {
-      csvContent += `${day.workout_date},${day.workout_count || 0},${day.total_minutes || 0}\n`;
-    });
-
-    csvContent += `\nMeal Data\n`;
-    csvContent += `Date,Total Calories,Meal Count\n`;
-    meals.forEach(day => {
-      csvContent += `${day.meal_date},${day.total_calories || 0},${day.meal_count || 0}\n`;
-    });
-
-    csvContent += `\nBadges Earned\n`;
-    csvContent += `Name,Description,Earned Date\n`;
-    badges.forEach(badge => {
-      csvContent += `${badge.name},${badge.description || ''},${badge.earned_at}\n`;
-    });
-
-    // Download file
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -175,9 +112,7 @@ const ParentDashboard = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
+  if (loading) return <div className="loading">Loading...</div>;
 
   return (
     <div className="parent-dashboard">
@@ -187,16 +122,10 @@ const ParentDashboard = () => {
       </header>
 
       <div className="parent-content">
-        {/* Link New Youth Section */}
         <div className="link-youth-section">
-          <button 
-            className="link-youth-btn"
-            onClick={() => setShowLinkForm(!showLinkForm)}
-          >
-            <Users size={20} />
-            Link New Youth Account
+          <button className="link-youth-btn" onClick={() => setShowLinkForm(!showLinkForm)}>
+            <Users size={20} /> Link New Youth Account
           </button>
-
           {showLinkForm && (
             <form className="link-form" onSubmit={handleLinkYouth}>
               <input
@@ -206,12 +135,13 @@ const ParentDashboard = () => {
                 onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
                 required
               />
+              {linkError && <p style={{ color: '#ef4444', fontSize: '0.875rem', margin: '0.5rem 0 0' }}>{linkError}</p>}
+              {linkSuccess && <p style={{ color: '#22c55e', fontSize: '0.875rem', margin: '0.5rem 0 0' }}>{linkSuccess}</p>}
               <button type="submit">Link Account</button>
             </form>
           )}
         </div>
 
-        {/* Youth List */}
         <div className="youth-list-section">
           <h2>Linked Youth Accounts</h2>
           {youthList.length === 0 ? (
@@ -230,17 +160,10 @@ const ParentDashboard = () => {
                     <p className="linked-date">Linked: {new Date(youth.linked_at).toLocaleDateString()}</p>
                   </div>
                   <div className="youth-actions">
-                    <button 
-                      className="view-report-btn"
-                      onClick={() => fetchReport(youth.id)}
-                    >
-                      <FileText size={18} />
-                      View Report
+                    <button className="view-report-btn" onClick={() => fetchReport(youth.id)}>
+                      <FileText size={18} /> View Report
                     </button>
-                    <ReportButton 
-                      userId={youth.id} 
-                      userName={`${youth.first_name} ${youth.last_name}`}
-                    />
+                    <ReportButton userId={youth.id} userName={`${youth.first_name} ${youth.last_name}`} />
                   </div>
                 </div>
               ))}
@@ -248,24 +171,16 @@ const ParentDashboard = () => {
           )}
         </div>
 
-        {/* Report Section */}
         {reportData && selectedYouth && (
           <div className="report-section">
             <div className="report-header">
-              <h2>
-                Activity Report: {youthList.find(y => y.id === selectedYouth)?.first_name || 'Youth'}
-              </h2>
+              <h2>Activity Report: {youthList.find(y => y.id === selectedYouth)?.first_name || 'Youth'}</h2>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button 
-                  className="download-btn" 
-                  onClick={() => fetchReport(selectedYouth)}
-                  disabled={reportLoading}
-                >
+                <button className="download-btn" onClick={() => fetchReport(selectedYouth)} disabled={reportLoading}>
                   {reportLoading ? 'Refreshing…' : 'Refresh Report'}
                 </button>
                 <button className="download-btn" onClick={downloadReport}>
-                  <Download size={18} />
-                  Download Report
+                  <Download size={18} /> Download Report
                 </button>
               </div>
             </div>
@@ -286,17 +201,10 @@ const ParentDashboard = () => {
                 <h3>Recent Wellness Activity</h3>
                 <div className="table-container">
                   <table>
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Water (cups)</th>
-                        <th>Sleep (hrs)</th>
-                        <th>Mood</th>
-                      </tr>
-                    </thead>
+                    <thead><tr><th>Date</th><th>Water (cups)</th><th>Sleep (hrs)</th><th>Mood</th></tr></thead>
                     <tbody>
                       {(reportData.wellness || []).length === 0 ? (
-                        <tr><td colSpan={4} style={{ color: '#64748b' }}>No wellness data in this period. Youth can log water, sleep, and mood from the Wellness page.</td></tr>
+                        <tr><td colSpan={4} style={{ color: '#64748b' }}>No wellness data in this period.</td></tr>
                       ) : (reportData.wellness || []).slice(0, 7).map((day, idx) => (
                         <tr key={idx}>
                           <td>{new Date(day.log_date).toLocaleDateString()}</td>
@@ -314,16 +222,10 @@ const ParentDashboard = () => {
                 <h3>Recent Workouts</h3>
                 <div className="table-container">
                   <table>
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Workouts</th>
-                        <th>Total Minutes</th>
-                      </tr>
-                    </thead>
+                    <thead><tr><th>Date</th><th>Workouts</th><th>Total Minutes</th></tr></thead>
                     <tbody>
                       {(reportData.workouts || []).length === 0 ? (
-                        <tr><td colSpan={3} style={{ color: '#64748b' }}>No workouts in this period. Youth can log workouts from the Fitness page.</td></tr>
+                        <tr><td colSpan={3} style={{ color: '#64748b' }}>No workouts in this period.</td></tr>
                       ) : (reportData.workouts || []).slice(0, 7).map((day, idx) => (
                         <tr key={idx}>
                           <td>{new Date(day.workout_date).toLocaleDateString()}</td>

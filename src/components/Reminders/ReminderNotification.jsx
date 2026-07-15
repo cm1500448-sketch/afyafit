@@ -1,6 +1,7 @@
 import { Bell, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import authFetch from '../../utils/authFetch';
 import './ReminderNotification.css';
 
 const ReminderNotification = () => {
@@ -10,42 +11,27 @@ const ReminderNotification = () => {
 
   useEffect(() => {
     checkExerciseReminder();
-    // Check every 30 minutes
+
     const interval = setInterval(checkExerciseReminder, 30 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
   const checkExerciseReminder = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/reminders/check-exercise', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
+      const res = await authFetch('http://localhost:5000/api/reminders/check-exercise');
       if (res.ok) {
         const data = await res.json();
         if (data.needs_reminder && !showNotification) {
-          setReminder({
-            title: 'Time to Exercise!',
-            message: "You haven't completed any workouts today. Stay active!",
-            type: 'exercise'
-          });
+          setReminder({ title: 'Time to Exercise!', message: "You haven't completed any workouts today. Stay active!", type: 'exercise' });
           setShowNotification(true);
-          
-          // Mark as sent
-          await fetch('http://localhost:5000/api/reminders/mark-sent', {
+          await authFetch('http://localhost:5000/api/reminders/mark-sent', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({})
           });
         }
       }
-    } catch (error) {
-      console.error('Error checking reminder:', error);
-    }
+    } catch (error) { console.error('Error checking reminder:', error); }
   };
 
   const handleDismiss = () => {

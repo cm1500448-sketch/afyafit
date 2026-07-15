@@ -1,20 +1,16 @@
-/**
- * AUTH - MAIN COMPONENT
- * 
- * Handles user authentication
- * Shows login, register, or forgot password forms
- */
-
-import ForgotPasswordForm from "./components/ForgotPasswordForm";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
-import useAuthForm from "./hooks/useAuthForm";
-import "./Auth.css";
+import ForgotPasswordForm from './components/ForgotPasswordForm';
+import LoginForm from './components/LoginForm';
+import OtpVerificationForm from './components/OtpVerificationForm';
+import RegisterForm from './components/RegisterForm';
+import useAuthForm from './hooks/useAuthForm';
+import './Auth.css';
 
 const Auth = ({ onLoginSuccess }) => {
   const {
     isLogin,
     isForgotPassword,
+    isVerifyingOtp,
+    pendingEmail,
     showPassword,
     showConfirmPassword,
     error,
@@ -23,6 +19,8 @@ const Auth = ({ onLoginSuccess }) => {
     handleChange,
     handleSubmit,
     handleForgotPassword,
+    handleVerifyOtp,
+    handleResendOtp,
     setShowPassword,
     setShowConfirmPassword,
     switchToLogin,
@@ -31,7 +29,18 @@ const Auth = ({ onLoginSuccess }) => {
     backToLogin
   } = useAuthForm(onLoginSuccess);
 
-  // Show forgot password form
+  if (isVerifyingOtp) {
+    return (
+      <OtpVerificationForm
+        email={pendingEmail}
+        onVerified={handleVerifyOtp}
+        onResend={handleResendOtp}
+        error={error}
+        successMessage={successMessage}
+      />
+    );
+  }
+
   if (isForgotPassword) {
     return (
       <ForgotPasswordForm
@@ -45,7 +54,6 @@ const Auth = ({ onLoginSuccess }) => {
     );
   }
 
-  // Show login form
   if (isLogin) {
     return (
       <LoginForm
@@ -62,7 +70,6 @@ const Auth = ({ onLoginSuccess }) => {
     );
   }
 
-  // Show register form
   return (
     <RegisterForm
       form={form}

@@ -1,21 +1,14 @@
-/**
- * SLEEP CARD COMPONENT
- * 
- * Displays sleep hours with input
- * Shows sleep quality status bar
- */
-
 const SleepCard = ({ sleep, onUpdateSleep }) => {
   return (
     <div className="wellness-card sleep-card">
       <h3>Sleep Quality</h3>
       <div className="sleep-input-container">
-        <span className="sleep-icon">🌙</span>
-        <input 
-          type="number" 
-          className="sleep-input" 
-          value={sleep} 
-          onChange={onUpdateSleep} 
+        <span className="sleep-icon">◌</span>
+        <input
+          type="number"
+          className="sleep-input"
+          value={sleep}
+          onChange={onUpdateSleep}
         />
         <span className="label">Hours</span>
       </div>

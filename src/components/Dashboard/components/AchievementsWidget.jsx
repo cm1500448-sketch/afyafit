@@ -1,10 +1,9 @@
-
 import { Award, ChevronDown, ChevronUp, TrendingUp, Trophy } from 'lucide-react';
 import { useState } from 'react';
 
 const AchievementsWidget = ({ badges, points }) => {
   const [expanded, setExpanded] = useState(false);
-  
+
   return (
     <div className="achievements-widget">
       <div className="widget-header" onClick={() => setExpanded(!expanded)}>
@@ -14,7 +13,7 @@ const AchievementsWidget = ({ badges, points }) => {
         </div>
         {expanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
       </div>
-      
+
       <div className="widget-stats">
         <div className="achievement-stat">
           <TrendingUp size={18} />

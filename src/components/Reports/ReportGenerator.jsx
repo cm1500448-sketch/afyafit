@@ -14,19 +14,16 @@ const ReportGenerator = () => {
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
-    // Get current user role
     const token = localStorage.getItem('token');
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
       setUserRole(payload.role || 'youth');
     }
 
-    // Set default date range (last 30 days)
     const endDate = new Date().toISOString().split('T')[0];
     const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     setFormData(prev => ({ ...prev, startDate, endDate }));
 
-    // Fetch users if parent, coach, or admin
     if (['parent', 'coach', 'admin'].includes(payload.role)) {
       fetchUsers();
     }
@@ -89,10 +86,8 @@ const ReportGenerator = () => {
         throw new Error(errorData.error || 'Failed to generate report');
       }
 
-      // Get PDF blob
       const blob = await response.blob();
-      
-      // Create download link
+
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -102,7 +97,6 @@ const ReportGenerator = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      // Show success message
       const { showNotification } = await import('../../utils/notification');
       showNotification('Report generated successfully!', 'success');
     } catch (err) {
@@ -120,7 +114,6 @@ const ReportGenerator = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="report-form">
-        {/* User Selection (for parent/coach/admin) */}
         {['parent', 'coach', 'admin'].includes(userRole) && users.length > 0 && (
           <div className="form-group">
             <label htmlFor="userId">Select User</label>
@@ -142,7 +135,6 @@ const ReportGenerator = () => {
           </div>
         )}
 
-        {/* Date Range */}
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="startDate">Start Date</label>
@@ -171,7 +163,6 @@ const ReportGenerator = () => {
           </div>
         </div>
 
-        {/* Include Charts (future feature) */}
         <div className="form-group checkbox-group">
           <label>
             <input
@@ -184,15 +175,13 @@ const ReportGenerator = () => {
           </label>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="error-message">
-            <span className="error-icon">⚠️</span>
+            <span className="error-icon">⚠ </span>
             {error}
           </div>
         )}
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}
@@ -205,14 +194,15 @@ const ReportGenerator = () => {
             </>
           ) : (
             <>
-              <span className="icon">📄</span>
+              <span className="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </span>
               Generate PDF Report
             </>
           )}
         </button>
       </form>
 
-      {/* Info Section */}
       <div className="report-info">
         <h3>What's Included in Your Report?</h3>
         <ul>

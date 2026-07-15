@@ -9,7 +9,6 @@ const ReportButton = ({ userId = null, userName = 'Your' }) => {
     setLoading(true);
 
     try {
-      // Default to last 30 days
       const endDate = new Date().toISOString().split('T')[0];
       const startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
@@ -33,10 +32,8 @@ const ReportButton = ({ userId = null, userName = 'Your' }) => {
         throw new Error(errorData.error || 'Failed to generate report');
       }
 
-      // Get PDF blob
       const blob = await response.blob();
-      
-      // Create download link
+
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -47,7 +44,7 @@ const ReportButton = ({ userId = null, userName = 'Your' }) => {
       document.body.removeChild(a);
     } catch (err) {
       setError(err.message);
-      setTimeout(() => setError(''), 5000); // Clear error after 5 seconds
+      setTimeout(() => setError(''), 5000);
     } finally {
       setLoading(false);
     }
@@ -68,7 +65,9 @@ const ReportButton = ({ userId = null, userName = 'Your' }) => {
           </>
         ) : (
           <>
-            <span className="icon">📄</span>
+            <span className="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span>
             Generate Report
           </>
         )}
